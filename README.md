@@ -98,14 +98,14 @@ Stating The Invariants:
 * Every Poll Actor has a key.
 * Every Poll Actor is registered (by key) on it's Node's Registry.
 * Every Poll Actor is Supervised.
-* Commands are delivered to a Poll Actor via the Mailroom.
-* If the Poll Actor is not running when a command is delivered it will
+* Messages are delivered to a Poll Actor via the Mailroom.
+* If the Poll Actor is not running when a message is delivered it will
   be started.
 * If Topology has changed and a Poll Actor's key no longer maps to
   its current Node, it will migrate to the correct Node.
 * Every Poll Actor has one read-only follower process (process pair)
   at each datacenter.
-* A Poll Actor processes commands and emits events.
+* A Poll Actor processes messages and emits events.
 * Before a Poll Actor commits an event to its event log, two of its four
   read-only followers must acknowledge receipt of the event.
 * When a Poll Actor starts it will ask (via Mailroom) if its four
@@ -118,6 +118,34 @@ Stating The Invariants:
 by using *Server HashRings*. A *Poll* process has a UUID that is used to map
 the *Poll* process to the place it lives. This means that as long as you have
 the *Poll* process UUID, you know how to route an event to this process.
+
+A *Poll* Actor looks like this:
+
+```elixir
+%{
+  key: %{id: "eca6fb3e-2f61-4496-85af-767a7713d432", zone: "MI-734"},
+  projections: %{...},
+  event_store: [...]
+}
+```
+
+A *Poll* Actor has a collection of event-handler plugins that are ideally
+loaded at deploy-time but can also be loaded in run-time
+
+An event-handler plugin has the following contract:
+
+```elixir
+@spec handle(
+  key :: map(),
+  projections :: projections(),
+  msg :: Message.t(),
+  history: [Message.t()]
+) :: {:ok, projections(), side_effects()}
+```
+
+This contract is a pure function which allows for complex logic to live
+inside the function itself and still have an easy surface to do property-based
+testing on to ensure the underlying logic can handle all cases.
 
 #### Process Pairs
 
