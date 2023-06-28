@@ -1,10 +1,7 @@
-defmodule Ballot.Router do
+defmodule Ballot.Mailroom do
   alias Ballot.Command
 
-  alias Ballot.Command.{
-    CreatePoll,
-    Vote
-  }
+  alias Ballot.Command.{CreatePoll, Vote}
 
   @type command :: %CreatePoll{} | %Vote{}
 
