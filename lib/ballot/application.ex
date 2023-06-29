@@ -6,11 +6,12 @@ defmodule Ballot.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      BallotWeb.Telemetry,
+      # BallotWeb.Telemetry,
       # Ballot.Repo,
-      {Phoenix.PubSub, name: Ballot.PubSub},
+      # {Phoenix.PubSub, name: Ballot.PubSub},
       # {Finch, name: Ballot.Finch},
-      BallotWeb.Endpoint
+      # BallotWeb.Endpoint
+      Ballot.Topology
     ]
 
     opts = [strategy: :one_for_one, name: Ballot.Supervisor]
