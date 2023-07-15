@@ -63,7 +63,7 @@ defmodule BallotWeb.Router do
   scope "/", BallotWeb do
     pipe_through [:browser]
 
-    delete "/users/log_out", UserSessionController, :delete
+    delete "/logout", UserSessionController, :delete
 
     live_session :current_user,
       on_mount: [{BallotWeb.UserAuth, :mount_current_user}] do
