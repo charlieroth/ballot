@@ -8,7 +8,7 @@ defmodule BallotWeb.LoginLive do
         Log in to account
         <:subtitle>
           Don't have an account?
-          <.link navigate={~p"/register"} class="font-semibold text-brand hover:underline">
+          <.link navigate={~p"/register"} class="font-semibold text-zinc-900 hover:underline">
             Register
           </.link>
           for an account now.
@@ -21,7 +21,7 @@ defmodule BallotWeb.LoginLive do
 
         <:actions>
           <.input field={@form[:remember_me]} type="checkbox" label="Keep me logged in" />
-          <.link href={~p"/reset-password"} class="text-sm font-semibold">
+          <.link href={~p"/reset-password"} class="text-sm font-normal hover:underline">
             Forgot your password?
           </.link>
         </:actions>
