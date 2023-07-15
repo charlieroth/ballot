@@ -1,4 +1,4 @@
-defmodule BallotWeb.UserRegistrationLiveTest do
+defmodule BallotWeb.RegisterLiveTest do
   use BallotWeb.ConnCase
 
   import Phoenix.LiveViewTest
@@ -6,7 +6,7 @@ defmodule BallotWeb.UserRegistrationLiveTest do
 
   describe "Registration page" do
     test "renders registration page", %{conn: conn} do
-      {:ok, _lv, html} = live(conn, ~p"/users/register")
+      {:ok, _lv, html} = live(conn, ~p"/register")
 
       assert html =~ "Register"
       assert html =~ "Log in"
@@ -16,14 +16,14 @@ defmodule BallotWeb.UserRegistrationLiveTest do
       result =
         conn
         |> log_in_user(user_fixture())
-        |> live(~p"/users/register")
+        |> live(~p"/register")
         |> follow_redirect(conn, "/")
 
       assert {:ok, _conn} = result
     end
 
     test "renders errors for invalid data", %{conn: conn} do
-      {:ok, lv, _html} = live(conn, ~p"/users/register")
+      {:ok, lv, _html} = live(conn, ~p"/register")
 
       result =
         lv
@@ -38,7 +38,7 @@ defmodule BallotWeb.UserRegistrationLiveTest do
 
   describe "register user" do
     test "creates account and logs the user in", %{conn: conn} do
-      {:ok, lv, _html} = live(conn, ~p"/users/register")
+      {:ok, lv, _html} = live(conn, ~p"/register")
 
       email = unique_user_email()
       form = form(lv, "#registration_form", user: valid_user_attributes(email: email))
@@ -56,7 +56,7 @@ defmodule BallotWeb.UserRegistrationLiveTest do
     end
 
     test "renders errors for duplicated email", %{conn: conn} do
-      {:ok, lv, _html} = live(conn, ~p"/users/register")
+      {:ok, lv, _html} = live(conn, ~p"/register")
 
       user = user_fixture(%{email: "test@email.com"})
 
@@ -73,7 +73,7 @@ defmodule BallotWeb.UserRegistrationLiveTest do
 
   describe "registration navigation" do
     test "redirects to login page when the Log in button is clicked", %{conn: conn} do
-      {:ok, lv, _html} = live(conn, ~p"/users/register")
+      {:ok, lv, _html} = live(conn, ~p"/register")
 
       {:ok, _login_live, login_html} =
         lv

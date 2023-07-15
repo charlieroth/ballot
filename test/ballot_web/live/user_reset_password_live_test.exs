@@ -110,7 +110,7 @@ defmodule BallotWeb.UserResetPasswordLiveTest do
         lv
         |> element(~s|main a:fl-contains("Register")|)
         |> render_click()
-        |> follow_redirect(conn, ~p"/users/register")
+        |> follow_redirect(conn, ~p"/register")
 
       assert conn.resp_body =~ "Register"
     end

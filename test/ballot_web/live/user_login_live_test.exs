@@ -65,7 +65,7 @@ defmodule BallotWeb.UserLoginLiveTest do
         lv
         |> element(~s|main a:fl-contains("Sign up")|)
         |> render_click()
-        |> follow_redirect(conn, ~p"/users/register")
+        |> follow_redirect(conn, ~p"/register")
 
       assert login_html =~ "Register"
     end

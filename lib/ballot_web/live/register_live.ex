@@ -1,4 +1,4 @@
-defmodule BallotWeb.UserRegistrationLive do
+defmodule BallotWeb.RegisterLive do
   use BallotWeb, :live_view
 
   alias Ballot.Accounts
@@ -35,7 +35,7 @@ defmodule BallotWeb.UserRegistrationLive do
         <.input field={@form[:password]} type="password" label="Password" required />
 
         <:actions>
-          <.button phx-disable-with="Creating account..." class="w-full">Create an account</.button>
+          <.button phx-disable-with="Creating account..." class="w-full">Register</.button>
         </:actions>
       </.simple_form>
     </div>
