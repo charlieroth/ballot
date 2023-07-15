@@ -1,4 +1,4 @@
-defmodule BallotWeb.UserConfirmationLive do
+defmodule BallotWeb.ConfirmationLive do
   use BallotWeb, :live_view
 
   alias Ballot.Accounts

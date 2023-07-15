@@ -59,7 +59,7 @@ defmodule BallotWeb.RegisterLive do
         {:ok, _} =
           Accounts.deliver_user_confirmation_instructions(
             user,
-            &url(~p"/users/confirm/#{&1}")
+            &url(~p"/confirm/#{&1}")
           )
 
         changeset = Accounts.change_user_registration(user)
