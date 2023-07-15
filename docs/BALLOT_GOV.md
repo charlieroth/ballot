@@ -88,8 +88,6 @@ abstractions that the BEAM, Erlang, Elixir and OTP have to offer.
 
 ## How Does Ballot Work
 
-
-
 ## References
 
 [GigCityElixir 2023: Bryan Hunter](https://www.youtube.com/watch?v=pQ0CvjAJXz4)
@@ -111,4 +109,3 @@ abstractions that the BEAM, Erlang, Elixir and OTP have to offer.
 [Elixir: Releases](https://elixir-lang.org/getting-started/mix-otp/config-and-releases.html#releases)
 
 ## WIP
-
