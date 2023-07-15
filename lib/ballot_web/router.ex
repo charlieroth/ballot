@@ -55,8 +55,8 @@ defmodule BallotWeb.Router do
 
     live_session :require_authenticated_user,
       on_mount: [{BallotWeb.UserAuth, :ensure_authenticated}] do
-      live "/users/settings", UserSettingsLive, :edit
-      live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+      live "/settings", SettingsLive, :edit
+      live "/settings/confirm_email/:token", SettingsLive, :confirm_email
     end
   end
 
