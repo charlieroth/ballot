@@ -23,11 +23,6 @@ defmodule BallotWeb.Router do
     get "/", PageController, :home
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", BallotWeb do
-  #   pipe_through :api
-  # end
-
   if Application.compile_env(:ballot, :dev_routes) do
     import Phoenix.LiveDashboard.Router
 
