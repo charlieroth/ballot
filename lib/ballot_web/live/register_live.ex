@@ -11,7 +11,7 @@ defmodule BallotWeb.RegisterLive do
         Register for an account
         <:subtitle>
           Already registered?
-          <.link navigate={~p"/users/log_in"} class="font-semibold text-brand hover:underline">
+          <.link navigate={~p"/login"} class="font-semibold text-brand hover:underline">
             Sign in
           </.link>
           to your account now.
@@ -24,7 +24,7 @@ defmodule BallotWeb.RegisterLive do
         phx-submit="save"
         phx-change="validate"
         phx-trigger-action={@trigger_submit}
-        action={~p"/users/log_in?_action=registered"}
+        action={~p"/login?_action=registered"}
         method="post"
       >
         <.error :if={@check_errors}>
