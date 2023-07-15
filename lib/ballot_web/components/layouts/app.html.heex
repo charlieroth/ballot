@@ -1,41 +1,41 @@
 <header class="px-4 sm:px-6 lg:px-8">
-  <div class="flex items-center justify-between border-b border-zinc-100 py-3 text-sm">
+  <div class="flex items-center justify-between border-b border-zinc-900 py-3">
     <div class="flex items-center gap-4">
-      <a href="/">
-        <img src={~p"/images/logo.svg"} width="36" />
+      <a href="/" class="leading-6 text-zinc-900 border border-zinc-900 px-2 py-1 hover:bg-zinc-900 hover:text-white transition-colors duration-150 delay-100">
+        Ballot
       </a>
     </div>
-    <div class="flex items-center gap-4 font-semibold leading-6 text-zinc-900">
+    <div class="flex items-center gap-4 leading-6 text-zinc-900">
       <%= if @current_user do %>
-        <span class="font-semibold leading-6 text-zinc-900 rounded-lg bg-zinc-100 px-2 py-1">
+        <span class="leading-6 border-2 border-zinc-900 px-2 py-1 hover:bg-zinc-900 hover:text-white transition-colors duration-150 delay-100">
           <%= @current_user.email %>
         </span>
-          <.link
-            href={~p"/settings"}
-            class="font-semibold leading-6 text-zinc-900 rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
-          >
-            Settings
-          </.link>
-          <.link
-            href={~p"/logout"}
-            method="delete"
-            class="font-semibold leading-6 text-zinc-900 rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
-          >
-            Log out
-          </.link>
+        <.link
+          href={~p"/settings"}
+          class="leading-6 border border-zinc-900 px-2 py-1 hover:bg-zinc-900 hover:text-white transition-colors duration-150 delay-100"
+        >
+          Settings
+        </.link>
+        <.link
+          href={~p"/logout"}
+          method="delete"
+          class="leading-6 border border-zinc-900 px-2 py-1 hover:bg-zinc-900 hover:text-white transition-colors duration-150 delay-100"
+        >
+          Log out
+        </.link>
       <% else %>
-          <.link
-            href={~p"/register"}
-            class="font-semibold leading-6 text-zinc-900 rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
-          >
-            Register
-          </.link>
-          <.link
-            href={~p"/login"}
-            class="font-semibold leading-6 text-zinc-900 rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
-          >
-            Log in
-          </.link>
+        <.link
+          href={~p"/register"}
+          class="leading-6 border border-zinc-900 px-2 py-1 hover:bg-zinc-900 hover:text-white transition-colors duration-150 delay-100"
+        >
+          ↖ Register
+        </.link>
+        <.link
+          href={~p"/login"}
+          class="leading-6 border border-zinc-900 px-2 py-1 hover:bg-zinc-900 hover:text-white transition-colors duration-150 delay-100"
+        >
+          Log In
+        </.link>
       <% end %>
     </div>
   </div>
