@@ -79,7 +79,7 @@ defmodule BallotWeb.LoginLiveTest do
         lv
         |> element(~s|main a:fl-contains("Forgot your password?")|)
         |> render_click()
-        |> follow_redirect(conn, ~p"/users/reset_password")
+        |> follow_redirect(conn, ~p"/reset-password")
 
       assert conn.resp_body =~ "Forgot your password?"
     end

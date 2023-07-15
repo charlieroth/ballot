@@ -296,7 +296,7 @@ defmodule Ballot.Accounts do
 
   ## Examples
 
-      iex> deliver_user_reset_password_instructions(user, &url(~p"/users/reset_password/#{&1}"))
+      iex> deliver_user_reset_password_instructions(user, &url(~p"/reset-password/#{&1}"))
       {:ok, %{to: ..., body: ...}}
 
   """

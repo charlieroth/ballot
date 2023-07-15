@@ -43,8 +43,8 @@ defmodule BallotWeb.Router do
       on_mount: [{BallotWeb.UserAuth, :redirect_if_user_is_authenticated}] do
       live "/register", RegisterLive, :new
       live "/login", LoginLive, :new
-      live "/users/reset_password", UserForgotPasswordLive, :new
-      live "/users/reset_password/:token", UserResetPasswordLive, :edit
+      live "/reset-password", ForgotPasswordLive, :new
+      live "/reset-password/:token", ResetPasswordLive, :edit
     end
 
     post "/login", UserSessionController, :create

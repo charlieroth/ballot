@@ -1,4 +1,4 @@
-defmodule BallotWeb.UserForgotPasswordLiveTest do
+defmodule BallotWeb.ForgotPasswordLiveTest do
   use BallotWeb.ConnCase
 
   import Phoenix.LiveViewTest
@@ -9,7 +9,7 @@ defmodule BallotWeb.UserForgotPasswordLiveTest do
 
   describe "Forgot password page" do
     test "renders email page", %{conn: conn} do
-      {:ok, lv, html} = live(conn, ~p"/users/reset_password")
+      {:ok, lv, html} = live(conn, ~p"/reset-password")
 
       assert html =~ "Forgot your password?"
       assert has_element?(lv, ~s|a[href="#{~p"/register"}"]|, "Register")
@@ -20,7 +20,7 @@ defmodule BallotWeb.UserForgotPasswordLiveTest do
       result =
         conn
         |> log_in_user(user_fixture())
-        |> live(~p"/users/reset_password")
+        |> live(~p"/reset-password")
         |> follow_redirect(conn, ~p"/")
 
       assert {:ok, _conn} = result
@@ -33,7 +33,7 @@ defmodule BallotWeb.UserForgotPasswordLiveTest do
     end
 
     test "sends a new reset password token", %{conn: conn, user: user} do
-      {:ok, lv, _html} = live(conn, ~p"/users/reset_password")
+      {:ok, lv, _html} = live(conn, ~p"/reset-password")
 
       {:ok, conn} =
         lv
@@ -48,7 +48,7 @@ defmodule BallotWeb.UserForgotPasswordLiveTest do
     end
 
     test "does not send reset password token if email is invalid", %{conn: conn} do
-      {:ok, lv, _html} = live(conn, ~p"/users/reset_password")
+      {:ok, lv, _html} = live(conn, ~p"/reset-password")
 
       {:ok, conn} =
         lv

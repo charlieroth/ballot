@@ -1,4 +1,4 @@
-defmodule BallotWeb.UserResetPasswordLive do
+defmodule BallotWeb.ResetPasswordLive do
   use BallotWeb, :live_view
 
   alias Ballot.Accounts
