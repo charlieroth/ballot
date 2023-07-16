@@ -4,7 +4,7 @@ defmodule Ballot.Repo.Migrations.CreateOptions do
   def change do
     create table(:options) do
       add :value, :string
-      add :poll_id, references(:poll, on_delete: :cascade)
+      add :poll_id, references(:polls, on_delete: :delete_all)
 
       timestamps()
     end
