@@ -1,0 +1,26 @@
+<.header>
+  Option <%= @option.id %>
+  <:subtitle>This is a option record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/options/#{@option}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit option</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Value"><%= @option.value %></:item>
+</.list>
+
+<.back navigate={~p"/options"}>Back to options</.back>
+
+<.modal :if={@live_action == :edit} id="option-modal" show on_cancel={JS.patch(~p"/options/#{@option}")}>
+  <.live_component
+    module={BallotWeb.OptionLive.FormComponent}
+    id={@option.id}
+    title={@page_title}
+    action={@live_action}
+    option={@option}
+    patch={~p"/options/#{@option}"}
+  />
+</.modal>

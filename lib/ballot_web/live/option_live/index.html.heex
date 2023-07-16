@@ -1,0 +1,41 @@
+<.header>
+  Listing Options
+  <:actions>
+    <.link patch={~p"/options/new"}>
+      <.button>New Option</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="options"
+  rows={@streams.options}
+  row_click={fn {_id, option} -> JS.navigate(~p"/options/#{option}") end}
+>
+  <:col :let={{_id, option}} label="Value"><%= option.value %></:col>
+  <:action :let={{_id, option}}>
+    <div class="sr-only">
+      <.link navigate={~p"/options/#{option}"}>Show</.link>
+    </div>
+    <.link patch={~p"/options/#{option}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, option}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: option.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="option-modal" show on_cancel={JS.patch(~p"/options")}>
+  <.live_component
+    module={BallotWeb.OptionLive.FormComponent}
+    id={@option.id || :new}
+    title={@page_title}
+    action={@live_action}
+    option={@option}
+    patch={~p"/options"}
+  />
+</.modal>
