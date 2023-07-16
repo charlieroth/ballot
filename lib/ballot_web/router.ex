@@ -57,6 +57,13 @@ defmodule BallotWeb.Router do
       on_mount: [{BallotWeb.UserAuth, :ensure_authenticated}] do
       live "/settings", SettingsLive, :edit
       live "/settings/confirm_email/:token", SettingsLive, :confirm_email
+
+      live "/polls", PollLive.Index, :index
+      live "/polls/new", PollLive.Index, :new
+
+      live "/polls/:id/edit", PollLive.Index, :edit
+      live "/polls/:id", PollLive.Index, :show
+      live "/polls/:id/show/edit", PollLive.Index, :edit
     end
   end
 
