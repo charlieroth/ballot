@@ -8,11 +8,11 @@ defmodule BallotWeb.RegisterLive do
     ~H"""
     <div class="mx-auto max-w-sm">
       <.header class="text-center">
-        Register for an account
+        Register
         <:subtitle>
           Already registered?
-          <.link navigate={~p"/login"} class="font-semibold text-brand hover:underline">
-            Sign in
+          <.link navigate={~p"/login"} class="font-semibold hover:underline">
+            Log in
           </.link>
           to your account now.
         </:subtitle>

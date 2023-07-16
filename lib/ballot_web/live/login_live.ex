@@ -5,7 +5,7 @@ defmodule BallotWeb.LoginLive do
     ~H"""
     <div class="mx-auto max-w-sm">
       <.header class="text-center">
-        Log in to account
+        Log in
         <:subtitle>
           Don't have an account?
           <.link navigate={~p"/register"} class="font-semibold text-zinc-900 hover:underline">
@@ -20,14 +20,14 @@ defmodule BallotWeb.LoginLive do
         <.input field={@form[:password]} type="password" label="Password" required />
 
         <:actions>
-          <.input field={@form[:remember_me]} type="checkbox" label="Keep me logged in" />
+          <.input field={@form[:remember_me]} type="checkbox" label="Remember Me" />
           <.link href={~p"/reset-password"} class="text-sm font-normal hover:underline">
-            Forgot your password?
+            Forgot Your Password?
           </.link>
         </:actions>
         <:actions>
-          <.button phx-disable-with="Signing in..." class="w-full">
-            Sign in <span aria-hidden="true">→</span>
+          <.button phx-disable-with="Connecting..." class="w-full">
+            Log in <span aria-hidden="true">→</span>
           </.button>
         </:actions>
       </.simple_form>

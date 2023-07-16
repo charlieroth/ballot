@@ -6,7 +6,7 @@ defmodule BallotWeb.SettingsLive do
   def render(assigns) do
     ~H"""
     <.header class="text-center">
-      Account Settings
+      Settings
       <:subtitle>Manage your account email address and password settings</:subtitle>
     </.header>
 
