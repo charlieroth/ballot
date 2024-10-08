@@ -1,26 +1,24 @@
 
-10:11:39.979 id=5 [debug] handled request client -> server textDocument/codeAction in 308µs
+10:13:51.620 id=101 [debug] handled request client -> server textDocument/codeAction in 129µs
 
-10:11:40.277 id=6 [debug] handled request client -> server textDocument/documentSymbol in 357µs
+10:13:51.919 id=102 [debug] handled request client -> server textDocument/documentSymbol in 364µs
 
-10:11:41.372 id=7 [debug] handled request client -> server textDocument/codeAction in 358µs
+10:13:52.456 id=103 [debug] handled request client -> server textDocument/formatting in 1ms
 
-10:11:41.588 id=8 [debug] handled request client -> server textDocument/formatting in 14ms
+10:13:52.466 id=74 [debug] sent request server -> client window/workDoneProgress/create
 
-10:11:41.599 id=11 [debug] sent request server -> client window/workDoneProgress/create
+10:13:52.466 [debug] handled notification client -> server textDocument/didSave in 560µs
 
-10:11:41.600 [debug] handled notification client -> server textDocument/didSave in 3ms
+10:13:52.467 [debug] sent notification server -> client $/progress
 
-10:11:41.600 [debug] sent notification server -> client $/progress
+10:13:52.471 [debug] sent notification server -> client window/logMessage
 
-10:11:41.604 [debug] sent notification server -> client window/logMessage
-
-10:11:41.604 [info] Compiling 2 files (.ex)
+10:13:52.471 [info] Compiling 2 files (.ex)
 
 
-10:11:41.604 [debug] sent notification server -> client window/logMessage
+10:13:52.472 [debug] sent notification server -> client window/logMessage
 
-10:11:41.605 [warning] sqlite3 error: attempt to write a readonly database
+10:13:52.472 [warning] sqlite3 error: attempt to write a readonly database
 
 statement: DELETE FROM 'references'
 WHERE file = ?;
@@ -28,11 +26,11 @@ WHERE file = ?;
 arguments: ["/Users/charlie/github.com/charlieroth/ballot/lib/ballot.ex"]
 
 
-10:11:41.605 id=3400 [debug] sent request server -> client window/workDoneProgress/create
+10:13:52.472 id=587 [debug] sent request server -> client window/workDoneProgress/create
 
-10:11:41.605 [debug] sent notification server -> client window/logMessage
+10:13:52.472 [debug] sent notification server -> client window/logMessage
 
-10:11:41.605 [warning] sqlite3 error: attempt to write a readonly database
+10:13:52.472 [warning] sqlite3 error: attempt to write a readonly database
 
 statement: DELETE FROM 'references'
 WHERE file = ?;
@@ -40,247 +38,21 @@ WHERE file = ?;
 arguments: ["/Users/charlie/github.com/charlieroth/ballot/lib/ballot/application.ex"]
 
 
-10:11:41.605 [debug] sent notification server -> client window/logMessage
+10:13:52.472 [debug] sent notification server -> client $/progress
 
-10:11:41.605 [warning] sqlite3 error: attempt to write a readonly database
+10:13:52.473 [debug] sent notification server -> client window/logMessage
 
-statement: INSERT INTO 'references' (identifier, arity, file, type, module, start_line, start_column, end_line, end_column, source)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-
-arguments: [:def, 2, "/Users/charlie/github.com/charlieroth/ballot/lib/ballot.ex", :function, "Kernel", 15, 3, 15, 5, "user"]
-
-
-10:11:41.605 [debug] sent notification server -> client $/progress
-
-10:11:41.605 [debug] sent notification server -> client window/logMessage
-
-10:11:41.605 [warning] sqlite3 error: attempt to write a readonly database
+10:13:52.473 [warning] sqlite3 error: attempt to write a readonly database
 
 statement: INSERT INTO 'references' (identifier, arity, file, type, module, start_line, start_column, end_line, end_column, source)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
-arguments: [:use, 1, "/Users/charlie/github.com/charlieroth/ballot/lib/ballot/application.ex", :function, "Kernel", 6, 3, 6, 5, "user"]
+arguments: [:def, 2, "/Users/charlie/github.com/charlieroth/ballot/lib/ballot.ex", :function, "Kernel", 4, 3, 4, 5, "user"]
 
 
-10:11:41.605 [debug] sent notification server -> client window/logMessage
+10:13:52.473 [debug] sent notification server -> client window/logMessage
 
-10:11:41.605 [warning] sqlite3 error: attempt to write a readonly database
-
-statement: INSERT INTO 'references' (identifier, arity, file, type, module, start_line, start_column, end_line, end_column, source)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-
-arguments: ["Application", nil, "/Users/charlie/github.com/charlieroth/ballot/lib/ballot/application.ex", :alias, "Application", 6, 7, 6, 17, "user"]
-
-
-10:11:41.606 [debug] sent notification server -> client window/logMessage
-
-10:11:41.606 [warning] sqlite3 error: attempt to write a readonly database
-
-statement: INSERT INTO 'references' (identifier, arity, file, type, module, start_line, start_column, end_line, end_column, source)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-
-arguments: [:def, 2, "/Users/charlie/github.com/charlieroth/ballot/lib/ballot/application.ex", :function, "Kernel", 9, 3, 9, 5, "user"]
-
-
-10:11:41.607 [debug] sent notification server -> client window/logMessage
-
-10:11:41.607 [warning] sqlite3 error: attempt to write a readonly database
-
-statement: INSERT INTO 'references' (identifier, arity, file, type, module, start_line, start_column, end_line, end_column, source)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-
-arguments: ["Ballot.Supervisor", nil, "/Users/charlie/github.com/charlieroth/ballot/lib/ballot/application.ex", :alias, "Ballot.Supervisor", 17, 43, 17, 59, "user"]
-
-
-10:11:41.607 [debug] sent notification server -> client window/logMessage
-
-10:11:41.607 [warning] sqlite3 error: attempt to write a readonly database
-
-statement: INSERT INTO 'references' (identifier, arity, file, type, module, start_line, start_column, end_line, end_column, source)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-
-arguments: ["Supervisor", nil, "/Users/charlie/github.com/charlieroth/ballot/lib/ballot/application.ex", :alias, "Supervisor", 18, 5, 18, 14, "user"]
-
-
-10:11:41.607 [debug] sent notification server -> client window/logMessage
-
-10:11:41.607 [warning] sqlite3 error: attempt to write a readonly database
-
-statement: INSERT INTO 'references' (identifier, arity, file, type, module, start_line, start_column, end_line, end_column, source)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-
-arguments: [:start_link, 2, "/Users/charlie/github.com/charlieroth/ballot/lib/ballot/application.ex", :function, "Supervisor", 18, 16, 18, 25, "user"]
-
-
-10:11:41.609 [debug] sent notification server -> client window/logMessage
-
-10:11:41.609 [warning] sqlite3 error: attempt to write a readonly database
-
-statement: DELETE FROM symbols
-WHERE module = ?;
-
-arguments: ["Ballot"]
-
-
-10:11:41.609 [debug] sent notification server -> client window/logMessage
-
-10:11:41.609 [warning] sqlite3 error: attempt to write a readonly database
-
-statement: INSERT INTO symbols (module, file, type, name, line, 'column', 'end_column', source)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?);
-
-arguments: ["Ballot", "/Users/charlie/github.com/charlieroth/ballot/lib/ballot.ex", "defmodule", "Ballot", 1, 1, 6, "user"]
-
-
-10:11:41.609 [debug] sent notification server -> client window/logMessage
-
-10:11:41.609 [warning] sqlite3 error: attempt to write a readonly database
-
-statement: INSERT INTO symbols (module, file, type, name, params, line, 'column', end_column, source)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
-
-arguments: ["Ballot", "/Users/charlie/github.com/charlieroth/ballot/lib/ballot.ex", :def, :hello, <<131, 106>>, 15, 7, 11, "user"]
-
-
-10:11:41.609 [debug] sent notification server -> client window/logMessage
-
-10:11:41.609 [warning] sqlite3 error: attempt to write a readonly database
-
-statement: DELETE FROM symbols
-WHERE module = ?;
-
-arguments: ["Ballot.Application"]
-
-
-10:11:41.610 [debug] sent notification server -> client window/logMessage
-
-10:11:41.610 [warning] sqlite3 error: attempt to write a readonly database
-
-statement: INSERT INTO symbols (module, file, type, name, line, 'column', 'end_column', source)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?);
-
-arguments: ["Ballot.Application", "/Users/charlie/github.com/charlieroth/ballot/lib/ballot/application.ex", "defmodule", "Ballot.Application", 1, 1, 18, "user"]
-
-
-10:11:41.610 [debug] sent notification server -> client window/logMessage
-
-10:11:41.610 [warning] sqlite3 error: attempt to write a readonly database
-
-statement: INSERT INTO symbols (module, file, type, name, params, line, 'column', end_column, source)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
-
-arguments: ["Ballot.Application", "/Users/charlie/github.com/charlieroth/ballot/lib/ballot/application.ex", :def, :start, <<131, 108, 0, 0, 0, 2, 104, 3, 119, 5, 95, 116, 121, 112, 101, 108, 0, 0, 0, 3, 104, 2, 119, 7, 118, 101, 114, 115, 105, 111, 110, 97, 0, 104, 2, 119, 4, 108, 105, 110, 101, 97, 9, 104, 2, ...>>, 9, 7, 11, "user"]
-
-
-10:11:41.610 [debug] sent notification server -> client window/logMessage
-
-10:11:41.610 [warning] sqlite3 error: attempt to write a readonly database
-
-statement: INSERT INTO symbols (module, file, type, name, params, line, 'column', end_column, source)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
-
-arguments: ["Ballot.Application", "/Users/charlie/github.com/charlieroth/ballot/lib/ballot/application.ex", :def, :stop, <<131, 108, 0, 0, 0, 1, 104, 3, 119, 6, 95, 115, 116, 97, 116, 101, 108, 0, 0, 0, 3, 104, 2, 119, 7, 118, 101, 114, 115, 105, 111, 110, 97, 0, 104, 2, 119, 4, 108, 105, 110, 101, 98, 0, 0, ...>>, 6, 1, 4, "user"]
-
-
-10:11:41.614 [debug] sent notification server -> client window/logMessage
-
-10:11:41.614 [info] Generated ballot app
-
-
-10:11:41.615 [debug] sent notification server -> client $/progress
-
-10:11:41.615 [debug] sent notification server -> client window/logMessage
-
-10:11:41.615 [info] Compiled ballot!
-
-10:11:41.710 [debug] sent notification server -> client $/progress
-
-10:11:41.948 [debug] handled notification client -> server workspace/didChangeWatchedFiles in 10ms
-
-10:11:43.337 id=9 [debug] handled request client -> server textDocument/codeAction in 398µs
-
-10:11:43.614 id=10 [debug] handled request client -> server textDocument/codeAction in 215µs
-
-10:11:44.010 [debug] handled notification client -> server textDocument/didChange in 6ms
-
-10:11:44.015 id=11 [debug] handled request client -> server textDocument/codeAction in 149µs
-
-10:11:44.106 id=12 [debug] handled request client -> server textDocument/documentSymbol in 659µs
-
-10:11:44.371 [debug] handled notification client -> server textDocument/didChange in 362µs
-
-10:11:44.469 id=13 [debug] handled request client -> server textDocument/documentSymbol in 1ms
-
-10:11:45.427 [debug] handled notification client -> server textDocument/didChange in 251µs
-
-10:11:45.427 id=14 [debug] handled request client -> server textDocument/codeAction in 164µs
-
-10:11:45.527 id=15 [debug] handled request client -> server textDocument/documentSymbol in 865µs
-
-10:11:45.818 [debug] handled notification client -> server textDocument/didChange in 312µs
-
-10:11:45.827 id=16 [debug] handled request client -> server textDocument/codeAction in 371µs
-
-10:11:45.917 id=17 [debug] handled request client -> server textDocument/documentSymbol in 1ms
-
-10:11:46.326 [debug] handled notification client -> server textDocument/didChange in 443µs
-
-10:11:46.327 id=18 [debug] handled request client -> server textDocument/codeAction in 338µs
-
-10:11:46.577 id=19 [debug] handled request client -> server textDocument/codeAction in 349µs
-
-10:11:46.676 id=20 [debug] handled request client -> server textDocument/documentSymbol in 1ms
-
-10:11:47.003 [debug] handled notification client -> server textDocument/didChange in 155µs
-
-10:11:47.106 id=21 [debug] handled request client -> server textDocument/documentSymbol in 1ms
-
-10:11:47.446 id=22 [debug] handled request client -> server textDocument/codeAction in 394µs
-
-10:11:47.752 [debug] handled notification client -> server textDocument/didChange in 338µs
-
-10:11:47.759 id=23 [debug] handled request client -> server textDocument/codeAction in 354µs
-
-10:11:47.852 id=24 [debug] handled request client -> server textDocument/documentSymbol in 784µs
-
-10:11:48.169 [debug] handled notification client -> server textDocument/didChange in 199µs
-
-10:11:48.270 id=25 [debug] handled request client -> server textDocument/documentSymbol in 844µs
-
-10:11:48.749 [debug] handled notification client -> server textDocument/didChange in 289µs
-
-10:11:48.749 id=26 [debug] handled request client -> server textDocument/codeAction in 285µs
-
-10:11:48.845 id=27 [debug] handled request client -> server textDocument/formatting in 1ms
-
-10:11:48.845 id=28 [debug] handled request client -> server textDocument/documentSymbol in 347µs
-
-10:11:48.856 id=75 [debug] sent request server -> client window/workDoneProgress/create
-
-10:11:48.857 [debug] handled notification client -> server textDocument/didSave in 966µs
-
-10:11:48.857 [debug] sent notification server -> client $/progress
-
-10:11:48.869 [debug] sent notification server -> client window/logMessage
-
-10:11:48.869 [info] Compiling 1 file (.ex)
-
-
-10:11:48.870 [debug] sent notification server -> client window/logMessage
-
-10:11:48.870 id=583 [debug] sent request server -> client window/workDoneProgress/create
-
-10:11:48.870 [warning] sqlite3 error: attempt to write a readonly database
-
-statement: DELETE FROM 'references'
-WHERE file = ?;
-
-arguments: ["/Users/charlie/github.com/charlieroth/ballot/lib/ballot/application.ex"]
-
-
-10:11:48.870 [debug] sent notification server -> client window/logMessage
-
-10:11:48.870 [warning] sqlite3 error: attempt to write a readonly database
+10:13:52.473 [warning] sqlite3 error: attempt to write a readonly database
 
 statement: INSERT INTO 'references' (identifier, arity, file, type, module, start_line, start_column, end_line, end_column, source)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
@@ -288,9 +60,9 @@ statement: INSERT INTO 'references' (identifier, arity, file, type, module, star
 arguments: [:use, 1, "/Users/charlie/github.com/charlieroth/ballot/lib/ballot/application.ex", :function, "Kernel", 4, 3, 4, 5, "user"]
 
 
-10:11:48.871 [debug] sent notification server -> client window/logMessage
+10:13:52.473 [debug] sent notification server -> client window/logMessage
 
-10:11:48.871 [warning] sqlite3 error: attempt to write a readonly database
+10:13:52.473 [warning] sqlite3 error: attempt to write a readonly database
 
 statement: INSERT INTO 'references' (identifier, arity, file, type, module, start_line, start_column, end_line, end_column, source)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
@@ -298,9 +70,9 @@ statement: INSERT INTO 'references' (identifier, arity, file, type, module, star
 arguments: ["Application", nil, "/Users/charlie/github.com/charlieroth/ballot/lib/ballot/application.ex", :alias, "Application", 4, 7, 4, 17, "user"]
 
 
-10:11:48.871 [debug] sent notification server -> client window/logMessage
+10:13:52.473 [debug] sent notification server -> client window/logMessage
 
-10:11:48.871 [warning] sqlite3 error: attempt to write a readonly database
+10:13:52.473 [warning] sqlite3 error: attempt to write a readonly database
 
 statement: INSERT INTO 'references' (identifier, arity, file, type, module, start_line, start_column, end_line, end_column, source)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
@@ -308,11 +80,9 @@ statement: INSERT INTO 'references' (identifier, arity, file, type, module, star
 arguments: [:def, 2, "/Users/charlie/github.com/charlieroth/ballot/lib/ballot/application.ex", :function, "Kernel", 7, 3, 7, 5, "user"]
 
 
-10:11:48.871 [debug] sent notification server -> client $/progress
+10:13:52.475 [debug] sent notification server -> client window/logMessage
 
-10:11:48.872 [debug] sent notification server -> client window/logMessage
-
-10:11:48.872 [warning] sqlite3 error: attempt to write a readonly database
+10:13:52.475 [warning] sqlite3 error: attempt to write a readonly database
 
 statement: INSERT INTO 'references' (identifier, arity, file, type, module, start_line, start_column, end_line, end_column, source)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
@@ -320,9 +90,9 @@ statement: INSERT INTO 'references' (identifier, arity, file, type, module, star
 arguments: ["Ballot.Supervisor", nil, "/Users/charlie/github.com/charlieroth/ballot/lib/ballot/application.ex", :alias, "Ballot.Supervisor", 9, 43, 9, 59, "user"]
 
 
-10:11:48.872 [debug] sent notification server -> client window/logMessage
+10:13:52.475 [debug] sent notification server -> client window/logMessage
 
-10:11:48.872 [warning] sqlite3 error: attempt to write a readonly database
+10:13:52.475 [warning] sqlite3 error: attempt to write a readonly database
 
 statement: INSERT INTO 'references' (identifier, arity, file, type, module, start_line, start_column, end_line, end_column, source)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
@@ -330,9 +100,9 @@ statement: INSERT INTO 'references' (identifier, arity, file, type, module, star
 arguments: ["Supervisor", nil, "/Users/charlie/github.com/charlieroth/ballot/lib/ballot/application.ex", :alias, "Supervisor", 10, 5, 10, 14, "user"]
 
 
-10:11:48.872 [debug] sent notification server -> client window/logMessage
+10:13:52.475 [debug] sent notification server -> client window/logMessage
 
-10:11:48.872 [warning] sqlite3 error: attempt to write a readonly database
+10:13:52.475 [warning] sqlite3 error: attempt to write a readonly database
 
 statement: INSERT INTO 'references' (identifier, arity, file, type, module, start_line, start_column, end_line, end_column, source)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
@@ -340,9 +110,39 @@ statement: INSERT INTO 'references' (identifier, arity, file, type, module, star
 arguments: [:start_link, 2, "/Users/charlie/github.com/charlieroth/ballot/lib/ballot/application.ex", :function, "Supervisor", 10, 16, 10, 25, "user"]
 
 
-10:11:48.874 [debug] sent notification server -> client window/logMessage
+10:13:52.478 [debug] sent notification server -> client window/logMessage
 
-10:11:48.875 [warning] sqlite3 error: attempt to write a readonly database
+10:13:52.478 [warning] sqlite3 error: attempt to write a readonly database
+
+statement: DELETE FROM symbols
+WHERE module = ?;
+
+arguments: ["Ballot"]
+
+
+10:13:52.478 [debug] sent notification server -> client window/logMessage
+
+10:13:52.478 [warning] sqlite3 error: attempt to write a readonly database
+
+statement: INSERT INTO symbols (module, file, type, name, line, 'column', 'end_column', source)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+
+arguments: ["Ballot", "/Users/charlie/github.com/charlieroth/ballot/lib/ballot.ex", "defmodule", "Ballot", 1, 1, 6, "user"]
+
+
+10:13:52.478 [debug] sent notification server -> client window/logMessage
+
+10:13:52.478 [warning] sqlite3 error: attempt to write a readonly database
+
+statement: INSERT INTO symbols (module, file, type, name, params, line, 'column', end_column, source)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+arguments: ["Ballot", "/Users/charlie/github.com/charlieroth/ballot/lib/ballot.ex", :def, :hello, <<131, 106>>, 4, 7, 11, "user"]
+
+
+10:13:52.482 [debug] sent notification server -> client window/logMessage
+
+10:13:52.482 [warning] sqlite3 error: attempt to write a readonly database
 
 statement: DELETE FROM symbols
 WHERE module = ?;
@@ -350,9 +150,9 @@ WHERE module = ?;
 arguments: ["Ballot.Application"]
 
 
-10:11:48.875 [debug] sent notification server -> client window/logMessage
+10:13:52.482 [debug] sent notification server -> client window/logMessage
 
-10:11:48.875 [warning] sqlite3 error: attempt to write a readonly database
+10:13:52.482 [warning] sqlite3 error: attempt to write a readonly database
 
 statement: INSERT INTO symbols (module, file, type, name, line, 'column', 'end_column', source)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?);
@@ -360,9 +160,9 @@ statement: INSERT INTO symbols (module, file, type, name, line, 'column', 'end_c
 arguments: ["Ballot.Application", "/Users/charlie/github.com/charlieroth/ballot/lib/ballot/application.ex", "defmodule", "Ballot.Application", 1, 1, 18, "user"]
 
 
-10:11:48.875 [debug] sent notification server -> client window/logMessage
+10:13:52.482 [debug] sent notification server -> client window/logMessage
 
-10:11:48.875 [warning] sqlite3 error: attempt to write a readonly database
+10:13:52.482 [warning] sqlite3 error: attempt to write a readonly database
 
 statement: INSERT INTO symbols (module, file, type, name, params, line, 'column', end_column, source)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
@@ -370,9 +170,9 @@ statement: INSERT INTO symbols (module, file, type, name, params, line, 'column'
 arguments: ["Ballot.Application", "/Users/charlie/github.com/charlieroth/ballot/lib/ballot/application.ex", :def, :start, <<131, 108, 0, 0, 0, 2, 104, 3, 119, 5, 95, 116, 121, 112, 101, 108, 0, 0, 0, 3, 104, 2, 119, 7, 118, 101, 114, 115, 105, 111, 110, 97, 0, 104, 2, 119, 4, 108, 105, 110, 101, 97, 7, 104, 2, ...>>, 7, 7, 11, "user"]
 
 
-10:11:48.875 [debug] sent notification server -> client window/logMessage
+10:13:52.482 [debug] sent notification server -> client window/logMessage
 
-10:11:48.875 [warning] sqlite3 error: attempt to write a readonly database
+10:13:52.482 [warning] sqlite3 error: attempt to write a readonly database
 
 statement: INSERT INTO symbols (module, file, type, name, params, line, 'column', end_column, source)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
@@ -380,365 +180,25 @@ statement: INSERT INTO symbols (module, file, type, name, params, line, 'column'
 arguments: ["Ballot.Application", "/Users/charlie/github.com/charlieroth/ballot/lib/ballot/application.ex", :def, :stop, <<131, 108, 0, 0, 0, 1, 104, 3, 119, 6, 95, 115, 116, 97, 116, 101, 108, 0, 0, 0, 3, 104, 2, 119, 7, 118, 101, 114, 115, 105, 111, 110, 97, 0, 104, 2, 119, 4, 108, 105, 110, 101, 98, 0, 0, ...>>, 4, 1, 4, "user"]
 
 
-10:11:48.878 [debug] sent notification server -> client $/progress
+10:13:52.489 [debug] sent notification server -> client window/logMessage
 
-10:11:48.878 [debug] sent notification server -> client window/logMessage
+10:13:52.489 [info] Generated ballot app
 
-10:11:48.878 [info] Compiled ballot!
 
-10:11:48.975 [debug] sent notification server -> client $/progress
+10:13:52.490 [debug] sent notification server -> client $/progress
 
-10:11:49.193 [debug] handled notification client -> server workspace/didChangeWatchedFiles in 366µs
+10:13:52.490 [debug] sent notification server -> client window/logMessage
 
-10:11:50.129 id=29 [debug] handled request client -> server textDocument/documentSymbol in 811µs
+10:13:52.490 [info] Compiled ballot!
 
-10:11:51.145 [debug] handled notification client -> server textDocument/didOpen in 175µs
+10:13:52.582 [debug] sent notification server -> client $/progress
 
-10:11:51.150 id=30 [debug] handled request client -> server textDocument/codeAction in 209µs
+10:13:52.805 [debug] handled notification client -> server workspace/didChangeWatchedFiles in 517µs
 
-10:11:51.150 id=31 [debug] handled request client -> server textDocument/documentSymbol in 372µs
+10:13:59.342 id=104 [debug] handled request client -> server textDocument/codeAction in 282µs
 
-10:11:51.449 id=32 [debug] handled request client -> server textDocument/documentSymbol in 397µs
+10:13:59.641 id=105 [debug] handled request client -> server textDocument/documentSymbol in 334µs
 
-10:11:53.621 [debug] handled notification client -> server textDocument/didChange in 309µs
+10:14:02.041 id=106 [debug] handled request client -> server textDocument/codeAction in 260µs
 
-10:11:53.718 id=33 [debug] handled request client -> server textDocument/documentSymbol in 469µs
-
-10:11:53.718 id=34 [debug] handled request client -> server textDocument/documentSymbol in 296µs
-
-10:11:55.235 [debug] handled notification client -> server textDocument/didChange in 148µs
-
-10:11:55.338 id=35 [debug] handled request client -> server textDocument/documentSymbol in 704µs
-
-10:11:55.339 id=36 [debug] handled request client -> server textDocument/documentSymbol in 530µs
-
-10:11:55.705 id=37 [debug] handled request client -> server textDocument/codeAction in 609µs
-
-10:11:56.332 id=38 [debug] handled request client -> server textDocument/codeAction in 486µs
-
-10:11:56.780 id=39 [debug] handled request client -> server textDocument/codeAction in 936µs
-
-10:11:57.179 [debug] handled notification client -> server textDocument/didChange in 340µs
-
-10:11:57.181 id=40 [debug] handled request client -> server textDocument/codeAction in 390µs
-
-10:11:57.278 id=41 [debug] handled request client -> server textDocument/documentSymbol in 675µs
-
-10:11:57.279 id=42 [debug] handled request client -> server textDocument/documentSymbol in 347µs
-
-10:11:58.700 id=43 [debug] handled request client -> server textDocument/formatting in 2ms
-
-10:11:58.720 id=139 [debug] sent request server -> client window/workDoneProgress/create
-
-10:11:58.721 [debug] handled notification client -> server textDocument/didSave in 440µs
-
-10:11:58.721 [debug] sent notification server -> client $/progress
-
-10:11:58.725 [debug] sent notification server -> client window/logMessage
-
-10:11:58.725 [info] Compiling 1 file (.ex)
-
-
-10:11:58.726 [debug] sent notification server -> client window/logMessage
-
-10:11:58.726 [warning] sqlite3 error: attempt to write a readonly database
-
-statement: DELETE FROM 'references'
-WHERE file = ?;
-
-arguments: ["/Users/charlie/github.com/charlieroth/ballot/lib/ballot.ex"]
-
-
-10:11:58.727 id=203 [debug] sent request server -> client window/workDoneProgress/create
-
-10:11:58.727 [debug] sent notification server -> client window/logMessage
-
-10:11:58.727 [warning] sqlite3 error: attempt to write a readonly database
-
-statement: INSERT INTO 'references' (identifier, arity, file, type, module, start_line, start_column, end_line, end_column, source)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-
-arguments: [:def, 2, "/Users/charlie/github.com/charlieroth/ballot/lib/ballot.ex", :function, "Kernel", 4, 3, 4, 5, "user"]
-
-
-10:11:58.727 [debug] sent notification server -> client $/progress
-
-10:11:58.730 [debug] sent notification server -> client window/logMessage
-
-10:11:58.730 [warning] sqlite3 error: attempt to write a readonly database
-
-statement: DELETE FROM symbols
-WHERE module = ?;
-
-arguments: ["Ballot"]
-
-
-10:11:58.730 [debug] sent notification server -> client window/logMessage
-
-10:11:58.730 [warning] sqlite3 error: attempt to write a readonly database
-
-statement: INSERT INTO symbols (module, file, type, name, line, 'column', 'end_column', source)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?);
-
-arguments: ["Ballot", "/Users/charlie/github.com/charlieroth/ballot/lib/ballot.ex", "defmodule", "Ballot", 1, 1, 6, "user"]
-
-
-10:11:58.730 [debug] sent notification server -> client window/logMessage
-
-10:11:58.730 [warning] sqlite3 error: attempt to write a readonly database
-
-statement: INSERT INTO symbols (module, file, type, name, params, line, 'column', end_column, source)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
-
-arguments: ["Ballot", "/Users/charlie/github.com/charlieroth/ballot/lib/ballot.ex", :def, :hello, <<131, 106>>, 4, 7, 11, "user"]
-
-
-10:11:58.732 [debug] sent notification server -> client $/progress
-
-10:11:58.732 [debug] sent notification server -> client window/logMessage
-
-10:11:58.732 [info] Compiled ballot!
-
-10:11:58.830 [debug] sent notification server -> client $/progress
-
-10:11:59.064 [debug] handled notification client -> server workspace/didChangeWatchedFiles in 514µs
-
-10:11:59.953 id=44 [debug] handled request client -> server textDocument/codeAction in 394µs
-
-10:12:01.539 [debug] handled notification client -> server textDocument/didChange in 198µs
-
-10:12:01.641 id=45 [debug] handled request client -> server textDocument/documentSymbol in 480µs
-
-10:12:01.642 id=46 [debug] handled request client -> server textDocument/documentSymbol in 329µs
-
-10:12:01.725 id=47 [debug] handled request client -> server textDocument/codeAction in 345µs
-
-10:12:01.761 id=48 [debug] handled request client -> server textDocument/formatting in 1ms
-
-10:12:01.768 id=267 [debug] sent request server -> client window/workDoneProgress/create
-
-10:12:01.768 [debug] handled notification client -> server textDocument/didSave in 597µs
-
-10:12:01.770 [debug] sent notification server -> client $/progress
-
-10:12:01.778 [debug] sent notification server -> client window/logMessage
-
-10:12:01.778 [info] Compiling 1 file (.ex)
-
-
-10:12:01.780 [debug] sent notification server -> client window/logMessage
-
-10:12:01.780 [warning] sqlite3 error: attempt to write a readonly database
-
-statement: DELETE FROM 'references'
-WHERE file = ?;
-
-arguments: ["/Users/charlie/github.com/charlieroth/ballot/lib/ballot.ex"]
-
-
-10:12:01.780 id=331 [debug] sent request server -> client window/workDoneProgress/create
-
-10:12:01.780 [debug] sent notification server -> client window/logMessage
-
-10:12:01.780 [warning] sqlite3 error: attempt to write a readonly database
-
-statement: INSERT INTO 'references' (identifier, arity, file, type, module, start_line, start_column, end_line, end_column, source)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-
-arguments: [:def, 2, "/Users/charlie/github.com/charlieroth/ballot/lib/ballot.ex", :function, "Kernel", 4, 3, 4, 5, "user"]
-
-
-10:12:01.781 [debug] sent notification server -> client $/progress
-
-10:12:01.785 [debug] sent notification server -> client window/logMessage
-
-10:12:01.785 [warning] sqlite3 error: attempt to write a readonly database
-
-statement: DELETE FROM symbols
-WHERE module = ?;
-
-arguments: ["Ballot"]
-
-
-10:12:01.785 [debug] sent notification server -> client window/logMessage
-
-10:12:01.785 [warning] sqlite3 error: attempt to write a readonly database
-
-statement: INSERT INTO symbols (module, file, type, name, line, 'column', 'end_column', source)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?);
-
-arguments: ["Ballot", "/Users/charlie/github.com/charlieroth/ballot/lib/ballot.ex", "defmodule", "Ballot", 1, 1, 6, "user"]
-
-
-10:12:01.785 [debug] sent notification server -> client window/logMessage
-
-10:12:01.785 [warning] sqlite3 error: attempt to write a readonly database
-
-statement: INSERT INTO symbols (module, file, type, name, params, line, 'column', end_column, source)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
-
-arguments: ["Ballot", "/Users/charlie/github.com/charlieroth/ballot/lib/ballot.ex", :def, :hello, <<131, 106>>, 4, 7, 11, "user"]
-
-
-10:12:01.787 [debug] sent notification server -> client $/progress
-
-10:12:01.787 [debug] sent notification server -> client window/logMessage
-
-10:12:01.788 [info] Compiled ballot!
-
-10:12:01.885 [debug] sent notification server -> client $/progress
-
-10:12:02.110 [debug] handled notification client -> server workspace/didChangeWatchedFiles in 639µs
-
-10:12:04.418 [debug] handled notification client -> server textDocument/didOpen in 100µs
-
-10:12:04.422 id=49 [debug] handled request client -> server textDocument/codeAction in 143µs
-
-10:12:04.422 id=50 [debug] handled request client -> server textDocument/documentSymbol in 201µs
-
-10:12:04.722 id=51 [debug] handled request client -> server textDocument/documentSymbol in 233µs
-
-10:12:05.986 id=52 [debug] handled request client -> server textDocument/codeAction in 463µs
-
-10:12:06.550 id=53 [debug] handled request client -> server textDocument/codeAction in 430µs
-
-10:12:07.902 id=54 [debug] handled request client -> server textDocument/codeAction in 251µs
-
-10:12:09.008 [debug] handled notification client -> server textDocument/didChange in 282µs
-
-10:12:09.009 id=55 [debug] handled request client -> server textDocument/codeAction in 357µs
-
-10:12:09.104 [debug] handled notification client -> server textDocument/didChange in 133µs
-
-10:12:09.104 id=56 [debug] handled request client -> server textDocument/documentSymbol in 238µs
-
-10:12:10.343 [debug] handled notification client -> server textDocument/didChange in 490µs
-
-10:12:10.445 id=57 [debug] handled request client -> server textDocument/documentSymbol in 793µs
-
-10:12:10.446 id=58 [debug] handled request client -> server textDocument/documentSymbol in 472µs
-
-10:12:10.532 id=59 [debug] handled request client -> server textDocument/codeAction in 378µs
-
-10:12:11.243 id=60 [debug] handled request client -> server textDocument/formatting in 3ms
-
-10:12:11.257 id=395 [debug] sent request server -> client window/workDoneProgress/create
-
-10:12:11.257 [debug] handled notification client -> server textDocument/didSave in 919µs
-
-10:12:11.258 [debug] sent notification server -> client $/progress
-
-10:12:11.265 [debug] sent notification server -> client $/progress
-
-10:12:11.265 [debug] sent notification server -> client window/logMessage
-
-10:12:11.265 [info] Compiled ballot!
-
-10:12:11.600 [debug] handled notification client -> server workspace/didChangeWatchedFiles in 799µs
-
-10:12:13.593 [debug] handled notification client -> server textDocument/didOpen in 253µs
-
-10:12:13.600 id=61 [debug] handled request client -> server textDocument/codeAction in 322µs
-
-10:12:13.600 id=62 [debug] handled request client -> server textDocument/documentSymbol in 141µs
-
-10:12:13.898 id=63 [debug] handled request client -> server textDocument/documentSymbol in 150µs
-
-10:12:15.322 [debug] handled notification client -> server textDocument/didOpen in 111µs
-
-10:12:15.326 id=64 [debug] handled request client -> server textDocument/codeAction in 216µs
-
-10:12:15.327 id=65 [debug] handled request client -> server textDocument/documentSymbol in 537µs
-
-10:12:15.626 id=66 [debug] handled request client -> server textDocument/documentSymbol in 518µs
-
-10:12:16.049 id=67 [debug] handled request client -> server textDocument/hover in 13ms
-
-10:12:16.684 id=68 [debug] handled request client -> server textDocument/hover in 852µs
-
-10:12:16.711 id=69 [debug] handled request client -> server textDocument/codeAction in 422µs
-
-10:12:17.251 [debug] handled notification client -> server textDocument/didChange in 301µs
-
-10:12:17.352 id=70 [debug] handled request client -> server textDocument/documentSymbol in 862µs
-
-10:12:17.352 id=71 [debug] handled request client -> server textDocument/documentSymbol in 518µs
-
-10:12:18.140 id=72 [debug] handled request client -> server textDocument/codeAction in 238µs
-
-10:12:18.478 [debug] handled notification client -> server textDocument/didChange in 284µs
-
-10:12:18.480 id=73 [debug] handled request client -> server textDocument/codeAction in 337µs
-
-10:12:18.580 id=74 [debug] handled request client -> server textDocument/documentSymbol in 898µs
-
-10:12:18.581 id=75 [debug] handled request client -> server textDocument/documentSymbol in 748µs
-
-10:12:19.231 [debug] handled notification client -> server textDocument/didChange in 120µs
-
-10:12:19.240 id=76 [debug] handled request client -> server textDocument/codeAction in 106µs
-
-10:12:19.334 id=77 [debug] handled request client -> server textDocument/documentSymbol in 1ms
-
-10:12:19.334 id=78 [debug] handled request client -> server textDocument/documentSymbol in 525µs
-
-10:12:19.626 [debug] handled notification client -> server textDocument/didChange in 396µs
-
-10:12:19.726 id=79 [debug] handled request client -> server textDocument/documentSymbol in 970µs
-
-10:12:19.727 id=80 [debug] handled request client -> server textDocument/documentSymbol in 614µs
-
-10:12:19.783 id=81 [debug] handled request client -> server textDocument/codeAction in 375µs
-
-10:12:20.895 [debug] handled notification client -> server textDocument/didChange in 318µs
-
-10:12:20.899 id=82 [debug] handled request client -> server textDocument/codeAction in 263µs
-
-10:12:20.996 [debug] handled notification client -> server textDocument/didChange in 114µs
-
-10:12:20.996 id=83 [debug] handled request client -> server textDocument/documentSymbol in 383µs
-
-10:12:21.345 id=84 [debug] handled request client -> server textDocument/documentSymbol in 365µs
-
-10:12:21.345 id=85 [debug] handled request client -> server textDocument/documentSymbol in 136µs
-
-10:12:21.605 id=86 [debug] handled request client -> server textDocument/formatting in 1ms
-
-10:12:21.621 id=10 [debug] sent request server -> client window/workDoneProgress/create
-
-10:12:21.621 [debug] handled notification client -> server textDocument/didSave in 581µs
-
-10:12:21.622 [debug] sent notification server -> client $/progress
-
-10:12:21.625 [debug] sent notification server -> client window/logMessage
-
-10:12:21.625 [info] Generated ballot app
-
-
-10:12:21.626 [debug] sent notification server -> client $/progress
-
-10:12:21.626 [debug] sent notification server -> client window/logMessage
-
-10:12:21.626 [info] Compiled ballot!
-
-10:12:21.964 [debug] handled notification client -> server workspace/didChangeWatchedFiles in 374µs
-
-10:12:22.650 id=87 [debug] handled request client -> server textDocument/codeAction in 504µs
-
-10:12:25.057 id=88 [debug] handled request client -> server textDocument/codeAction in 292µs
-
-10:12:25.307 id=89 [debug] handled request client -> server textDocument/codeAction in 384µs
-
-10:12:25.355 id=90 [debug] handled request client -> server textDocument/documentSymbol in 485µs
-
-10:12:25.578 id=91 [debug] handled request client -> server textDocument/codeAction in 173µs
-
-10:12:25.829 id=92 [debug] handled request client -> server textDocument/codeAction in 257µs
-
-10:12:25.877 id=93 [debug] handled request client -> server textDocument/documentSymbol in 332µs
-
-10:12:26.174 id=94 [debug] handled request client -> server textDocument/codeAction in 237µs
-
-10:12:26.425 id=95 [debug] handled request client -> server textDocument/codeAction in 310µs
-
-10:12:26.473 id=96 [debug] handled request client -> server textDocument/documentSymbol in 667µs
+10:14:02.339 id=107 [debug] handled request client -> server textDocument/documentSymbol in 466µs
