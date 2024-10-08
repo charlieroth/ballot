@@ -4,19 +4,18 @@ Project Waterpark was presented by Bryan Hunter at the GigCityElixir conference 
 
 Team aimed at building system with no downtime, prevent data hoarding due to previous incidences of this and make a places for teams to perform experiments that are fast and cheap to get results without extinguishing capital (political or otherwise)
 
-
 ## Overview of Waterpark
 
 Waterpark is a general-purpose I/O system. Data can come in, potentially be transformed and is sent to another destination (Kafka topic, third-party service, etc.). Waterpark can also produce its own signals based on input it receives. A list of all the capabilities that Waterpark has:
 
-* Integration Engine
-* Streaming System
-* Distributed Database
-* CDN
-* FaaS (Function as a Service) Platform
-* Complex Event Processor
-* Queue
-* Cache
+- Integration Engine
+- Streaming System
+- Distributed Database
+- CDN
+- FaaS (Function as a Service) Platform
+- Complex Event Processor
+- Queue
+- Cache
 
 The reason that all of these capabilities were built via Elixir was to prevent external dependencies like Redis or Kafka which can introduce operational complexity and possible degradation of availability.
 
@@ -26,18 +25,16 @@ The team building this project believed that the industry standard of reusing co
 
 While the Waterpark project did implement a lot of its own system components, they did not re-invent everything. Looking at the conventional hardware/software stack:
 
-* User
-* Application
-* Operating System
-* Hardware
-
+- User
+- Application
+- Operating System
+- Hardware
 
 They did not re-invent the Hardware level, they chose conventional physical servers with no shared memory which are widely available to anyone that wishes to operate one.
 
 They did not re-invent the OS level, they chose to use the BEAM Virtual Machine as their OS thereby limiting their dependency on underlying operating systems to anything that can run a BEAM VM instance which is all popular operating systems in use today (Linux, MacOS, Windows, BSD). The BEAM VM handles process management, interrupts, memory management, file system operations, networking and general I/O operations.
 
 They did however re-invent the Application and User layers, this is Waterpark project itself.
-
 
 ## BEAM VM & The Actor Model
 
@@ -54,8 +51,7 @@ A BEAM VM process, or Actor process, is a digital twin of a patient in a care ce
 
 Waterpark models each patient as a long-running “patient actor”, at the time of the presentation millions of patient actors. Patient actors run from pre-admit to post-discharge, often running for several weeks and a minimum of 21 days. A patient actor is not limited to the latest HL7 message, it holds every message and event that lead to the current state, this could be thousands of messages.
 
-A detailed history of patient events, otherwise known as full-visit awareness, enables real-time notifications and alerts based on days or weeks of events (e.g., transfers, drugs administered, lab results, procedures). 
-
+A detailed history of patient events, otherwise known as full-visit awareness, enables real-time notifications and alerts based on days or weeks of events (e.g., transfers, drugs administered, lab results, procedures).
 
 ## Going to Production
 
@@ -79,14 +75,13 @@ The concept of process pairs was introduced by Jim Gray while building the Tande
 
 The problem that Tandem Computing solves in a system of processes is:
 
-* Supervisor starts a child
-* Process has no data
-* Process gets some data
-* Process gets some more data
-* Process crashes
-* Process restarts
-* Process has no data
-
+- Supervisor starts a child
+- Process has no data
+- Process gets some data
+- Process gets some more data
+- Process crashes
+- Process restarts
+- Process has no data
 
 ## Waterpark Process Pairs
 
@@ -94,11 +89,9 @@ A patient goes into a care center. A patient process is created, with ID 1001, a
 
 In the case of a failing writer process (node or network partition), a change in the topology is detected. The writer process is re-spawned in a different node within the same datacenter and availability zone but on a different node. To recover the state of the writer process, it chooses the nearest best read-replica process to recover from. This leads to question how do we know where the writer process and corresponding read-replica process live?
 
-
 ## Server HashRings
 
 The location assignment of a process is done via the bitwalker/libring library. This is one of the only aspects of the Waterpark system that depends on an external dependency. This library is small and single-purpose making it an acceptable dependency in the Waterpark system. In short, given a patient process key, it will deterministically assign the location of this process to a location in the HashRing, unless there is a change in the topology that the HashRing represents. This implementation of HashRings uses Consistent Hashing to minimizes changes as the range of the function changes. This keeps the topological structure small, deterministic and easy to share amongst nodes.
-
 
 ## Topology
 
@@ -113,7 +106,6 @@ This approach to cluster topology removed the requirement for a globally-consist
 
 Due to the guarantees that the topology data structure, powered by HashRings, gives Waterpark, there is only one possible location for a patient process to live. This guarantee means that routing a message to the proper local process registry is trivial given the features of the BEAM VM. Therefore no global registry is required.
 
-
 ## Location Transparency
 
 The distribution capabilities of the BEAM VM was embedded day-one by the creator Joe Armstrong on the premise that “the way it works in the distributed case should be the same for the local case”.
@@ -126,37 +118,35 @@ A messages comes into the system. This message can be received by any node. No o
 
 The Mailroom provides:
 
-* A nice seam for testing - no need for simulated integration testing, unit testing is possible
-* A place to bundle data
-* A spot to compress data
-* A way to hide complex network logistics (RPC, HTTP, Websockets, etc.)
-* A path to distribution replacements - Waterpark currently uses the built-in Erlang distribution but this could be replaced with Phoenix Channels or a combination of multiple mechanisms.
+- A nice seam for testing - no need for simulated integration testing, unit testing is possible
+- A place to bundle data
+- A spot to compress data
+- A way to hide complex network logistics (RPC, HTTP, Websockets, etc.)
+- A path to distribution replacements - Waterpark currently uses the built-in Erlang distribution but this could be replaced with Phoenix Channels or a combination of multiple mechanisms.
 
 ## Patient Actor, Stating the Invariants
 
-* Every patient actor has a key
-* Every patient actor is registered (by key) on its node’s registry
-* Every patient actor is supervised
-* Commands are delivered to a patient actor via the mailroom
-* If the patient actor is not running when a command is delivered it will be started
-* If the topology has changed and a patient actor’s key no longer maps to its current node, it will migrate to the correct node
-* Every patient actor has one read-only follower process (process pair) at each data center
-* A patient actor processes commands and emits events
-* Before a patient actor commits an event to its event log, two of its four read-only followers must acknowledge receipt of the event
-* When a patient actor starts it will ask (via mailroom) if its four read-only followers have state
-    * If they do, the patient actor will recover from the “best” reader
-* Each patient actor’s state contains its key, an event store, and Map for event handler plugins to store projections
-
+- Every patient actor has a key
+- Every patient actor is registered (by key) on its node’s registry
+- Every patient actor is supervised
+- Commands are delivered to a patient actor via the mailroom
+- If the patient actor is not running when a command is delivered it will be started
+- If the topology has changed and a patient actor’s key no longer maps to its current node, it will migrate to the correct node
+- Every patient actor has one read-only follower process (process pair) at each data center
+- A patient actor processes commands and emits events
+- Before a patient actor commits an event to its event log, two of its four read-only followers must acknowledge receipt of the event
+- When a patient actor starts it will ask (via mailroom) if its four read-only followers have state
+  - If they do, the patient actor will recover from the “best” reader
+- Each patient actor’s state contains its key, an event store, and Map for event handler plugins to store projections
 
 ## Deployments
 
 To achieve the zero-downtime requirements of the Waterpark system the following approaches / tools were used:
 
-* Erlang OTP Releases
-* Hot code reloading - Sending a new BEAM file, corresponding to a module, to a running BEAM instance. On the next external call (usually via a process making use of the module) of this module, the BEAM file corresponding to the module will be reloaded and execution will carry on with the new implementation.
-* Dark launches - a feature is pushed out to the system, placed in the running application’s config. Once the node bounces or a “switch” is explicitly flipped on, the new feature is live. This allows for A/B testing to ensure system integrity across functionality changes
-* Universal Server and Plugins - Instead of sending a message to a “server” (a process that handles requests and delivers responses) like a string or some simple data structure, you send a data structure that acts as instructions for that “server”. This allows a once HTTP server to become a now FTP server or whatever server like implementation you can specify with code.
-
+- Erlang OTP Releases
+- Hot code reloading - Sending a new BEAM file, corresponding to a module, to a running BEAM instance. On the next external call (usually via a process making use of the module) of this module, the BEAM file corresponding to the module will be reloaded and execution will carry on with the new implementation.
+- Dark launches - a feature is pushed out to the system, placed in the running application’s config. Once the node bounces or a “switch” is explicitly flipped on, the new feature is live. This allows for A/B testing to ensure system integrity across functionality changes
+- Universal Server and Plugins - Instead of sending a message to a “server” (a process that handles requests and delivers responses) like a string or some simple data structure, you send a data structure that acts as instructions for that “server”. This allows a once HTTP server to become a now FTP server or whatever server like implementation you can specify with code.
 
 ## Event Handler Plugins
 
