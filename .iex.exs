@@ -1,1 +1,1 @@
-alias Ballot.TopologyServer
+alias Ballot.Topology
