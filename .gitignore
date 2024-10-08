@@ -27,3 +27,4 @@ ballot-*.tar
 
 # Language Server
 /.elixir_ls/
+/.elixir_tools/

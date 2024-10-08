@@ -3,6 +3,6 @@ defmodule BallotTest do
   doctest Ballot
 
   test "greets the world" do
-    assert Ballot.hello() == :world
+    assert Ballot.hello() == :ballot
   end
 end

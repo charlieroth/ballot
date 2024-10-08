@@ -1,18 +1,7 @@
 defmodule Ballot do
-  @moduledoc """
-  Documentation for `Ballot`.
-  """
+  @moduledoc false
 
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Ballot.hello()
-      :world
-
-  """
   def hello do
-    :world
+    :ballot
   end
 end

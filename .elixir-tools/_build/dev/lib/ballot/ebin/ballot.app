@@ -1,0 +1,9 @@
+{application,ballot,
+             [{config_mtime,1728375141},
+              {optional_applications,[]},
+              {applications,[kernel,stdlib,elixir,logger]},
+              {description,"ballot"},
+              {modules,['Elixir.Ballot','Elixir.Ballot.Application']},
+              {registered,[]},
+              {vsn,"0.1.0"},
+              {mod,{'Elixir.Ballot.Application',[]}}]}.
