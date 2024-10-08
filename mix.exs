@@ -19,6 +19,8 @@ defmodule Ballot.MixProject do
   end
 
   defp deps do
-    []
+    [
+      {:libring, "~> 1.7"}
+    ]
   end
 end
