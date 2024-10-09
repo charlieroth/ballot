@@ -5,8 +5,12 @@ defmodule Ballot.Application do
 
   @impl true
   def start(_type, _args) do
+    topologies = Application.get_env(:libcluster, :topologies)
+
     children = [
-      {Ballot.Topology, ["MI", "OH", "IN", "IL"]}
+      {Registry, keys: :unique, name: Ballot.Registry},
+      {Cluster.Supervisor, [topologies, [name: Ballot.ClusterSupervisor]]},
+      Topology
     ]
 
     opts = [strategy: :one_for_one, name: Ballot.Supervisor]

@@ -88,29 +88,6 @@ receives acknowledgement from 2 of it's 4 _Read Replica Processes_
 - Each _Election Actor_'s state contains its key, an event store, and Map for
   event handler plugins to store projections
 
-## Cluster
+## Cluster Topology
 
-A running Ballot System is designed to be geographically distributed
-to provide high availability. This requires a cluster architecture as follows:
-
-- Designated 4 data centers for election data to be stored in, each having
-  2 availability zones
-- Each of the 4 data centers runs a total of 8 nodes, 8 physical machines
-- The 8 nodes in a data center are split in groups of 4, 4 for each
-  availability zone
-- Each of the 32 nodes of the entire cluster run an instance of the Ballot
-  Software System
-
-To ensure high availability the Ballot System has no "master" nodes,
-therefore each running instance is a "peer" or "worker" node.
-
-### Cluster Topology
-
-Expanding on the above points, the cluster topology of a running Ballot Software
-System is managed by data structure that uses `HashRing` data structures to
-ensure that each running node has a consistent view of where nodes are in the
-system and where a _Election Actor_ is running.
-
-By using a shared data structure in the way that Ballot uses it, the concept of
-consensus is pushed to the edge of the software system rather than being tangled
-in the lower layers of the system.
+[Topology.md](/docs/Topology.md)

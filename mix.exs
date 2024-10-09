@@ -20,7 +20,8 @@ defmodule Ballot.MixProject do
 
   defp deps do
     [
-      {:libring, "~> 1.7"}
+      {:libring, "~> 1.7"},
+      {:libcluster, "~> 3.4"}
     ]
   end
 end

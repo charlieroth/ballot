@@ -1,1 +1,1 @@
-alias Ballot.Topology
+alias Topology
