@@ -34,59 +34,11 @@ fault-tolerant and distributed software systems.
 
 ## Mailroom
 
-Inbound messages are routed through a node's _Mailroom_. The _Mailroom_ is the
-how location transparency is achieved in a Ballot System. The _Mailroom_ is the
-only component of a node that knows about the Topology (see "Cluster Toplogy"
-section below).
+[Mailroom.md](/docs/Mailroom.md)
 
-If an _Election Actor_ is on a remote node, the _Mailroom_ routes the message to
-the remote node's _Mailroom_. If the _Topology_ changes when the message is
-in-flight, the _Mailroom_ will re-route the message to the correct _Mailroom_.
-Once the correct, local, _Mailroom_ receives the message, it is delivered to
-the correct _Election Actor_ process. The message then ready to be recorded.
+## Election
 
-## Election Actor
-
-This main entity in the Ballot System is an _Election Actor_. It processes commands
-and emits events.
-
-An _Election Actor_ is an Actor Process, a digital twin of a election being carried
-out by humans. An _Election Actor_ is a long-running process that will be alive
-for the entirety of an election and for however long those election results are
-desired to live in the Ballot system. An _Election Actor_ process is alive for a
-minimum of 21 days.
-
-An _Election Actor_ contains all events the entire lifecycle of an election.
-
-An _Election Actor_ is designed as a _Process Pair_, popularized by Jim Gray's
-Tandem Computing. Practically, for each election there is a _Writer Process_
-which receives and processes all commands for a given election. This
-_Writer Process_ also has 4 _Read Replica Processes_ to ensure high
-availability of election data.
-
-A message is considered "acknowledged" if the _Election Actor_ writer processes
-receives acknowledgement from 2 of it's 4 _Read Replica Processes_
-
-### Election Actor Invariants
-
-- Every _Election Actor_ has a key
-- Every _Election Actor_ is registered (by key) on its node’s registry
-- Every _Election Actor_ is supervised
-- Commands are delivered to a _Election Actor_ via the _Mailroom_
-- If the _Election Actor_ is not running when a command is delivered it will
-  be started
-- If the topology has changed and a _Election Actor_’s key no longer maps to its
-  current node, it will migrate to the correct node
-- Every _Election Actor_ has one read-only follower process (process pair) at
-  each data center
-- A _Election Actor_ processes commands and emits events
-- Before a _Election Actor_ commits an event to its event log, two of its
-  four read-only followers must acknowledge receipt of the event
-- When a _Election Actor_ starts it will ask (via _Mailroom_) if its four
-  read-only followers have state
-  - If they do, the _Election Actor_ will recover from the "best" reader
-- Each _Election Actor_'s state contains its key, an event store, and Map for
-  event handler plugins to store projections
+[Election.md](/docs/Election.md)
 
 ## Cluster Topology
 
