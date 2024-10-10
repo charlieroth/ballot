@@ -42,7 +42,13 @@ defmodule Topology do
   @impl true
   def init(:ok) do
     :net_kernel.monitor_nodes(true)
-    state = Topology.State.new()
+    nodes = [Node.self() | Node.list()]
+
+    state =
+      Enum.reduce(nodes, Topology.State.new(), fn node, state ->
+        Topology.State.add_node(state, node)
+      end)
+
     {:ok, state}
   end
 
@@ -67,12 +73,14 @@ defmodule Topology do
   end
 
   @impl true
-  def handle_call(_msg, _from, state) do
+  def handle_call(msg, _from, state) do
+    Logger.info("[topology:call] - received unknown message: #{inspect(msg)}")
     {:reply, nil, state}
   end
 
   @impl true
-  def handle_cast(_msg, state) do
+  def handle_cast(msg, state) do
+    Logger.info("[topology:cast] - received unknown message: #{inspect(msg)}")
     {:noreply, state}
   end
 
