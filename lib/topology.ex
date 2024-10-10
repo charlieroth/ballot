@@ -105,8 +105,8 @@ defmodule Topology do
   end
 
   @impl true
-  def terminate(_reason, _state) do
-    Logger.info("[topology] - terminating")
+  def terminate(reason, _state) do
+    Logger.info("[topology:terminate] - terminating: #{inspect(reason)}")
     :ok
   end
 end
