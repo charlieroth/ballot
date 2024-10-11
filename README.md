@@ -1,7 +1,7 @@
 # Ballot
 
 Ballot is an experiment in building a distributed, geographically
-fault-tolerant, RAM based, embedded database for holding elections.
+fault-tolerant, RAM based, embedded election database.
 
 Ballot is built with Elixir and minimal dependencies.
 
