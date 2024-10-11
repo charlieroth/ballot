@@ -11,6 +11,7 @@ defmodule Ballot.Application do
       {Registry, keys: :unique, name: Ballot.Registry},
       {Cluster.Supervisor, [topologies, [name: Ballot.ClusterSupervisor]]},
       Topology,
+      Mailroom,
       Election.Supervisor
     ]
 
