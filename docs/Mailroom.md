@@ -1,24 +1,21 @@
 # Mailroom
 
-The `Mailroom` a process in a node that is aware of the `Topology`.
+The `Mailroom` is the how location transparency is achieved in Ballot.
 
-The `Mailroom` is responsible for routing messages to the correct `Election`
-process.
-
-This is achieved by using the `Topology` to determine the location of the
-`Election` process and then routing the message to the correct node.
+The `Mailroom` is a process that is aware of the cluster's `Topology`
+and routes messages to the correct, local or remote, `Election` process.
 
 ## Message Routing
 
-Inbound messages are routed through a node's `Mailroom`.
-
-The `Mailroom` is the how location transparency is achieved in Ballot.
+When the `Mailroom` receives a message, it uses the `Topology` to find
+the location of the intended `Election` process in the cluster.
 
 If an `Election` process is on a remote node, the `Mailroom` routes the message
 to the remote node's `Mailroom`.
 
-If the `Topology` changes when the message is in-flight, the `Mailroom` will
-re-route the message to the correct `Mailroom`.
+Because the `Mailroom` relies on the `Topology` to tell it where the intended
+`Election` process is, if the `Topology` changes when the message is in-flight,
+the `Mailroom` will re-route the message to the correct node's `Mailroom`.
 
 Once the correct, local, `Mailroom` receives the message, it is delivered to
 the correct `Election` process. The message then ready to be processed.
