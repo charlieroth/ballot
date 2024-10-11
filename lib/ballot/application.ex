@@ -10,7 +10,8 @@ defmodule Ballot.Application do
     children = [
       {Registry, keys: :unique, name: Ballot.Registry},
       {Cluster.Supervisor, [topologies, [name: Ballot.ClusterSupervisor]]},
-      Topology
+      Topology,
+      Election.Supervisor
     ]
 
     opts = [strategy: :one_for_one, name: Ballot.Supervisor]

@@ -44,14 +44,15 @@ defmodule Topology.State do
   @doc """
   Get the actor server for a given actor key
   """
-  @spec get_actor_server(t(), %{id: String.t(), facility: String.t()}) :: String.t()
+  @spec get_actor_server(t(), Election.Key.t()) :: String.t()
   def get_actor_server(
         %Topology.State{dc_hash_rings: dc_hash_rings, cluster_hash_ring: cluster_hash_ring},
-        %{id: id, facility: facility}
+        %Election.Key{} = election_key
       ) do
-    dc = HashRing.key_to_node(cluster_hash_ring, {id, facility})
+    election_name = Election.Key.to_name(election_key)
+    dc = HashRing.key_to_node(cluster_hash_ring, election_name)
     dc_hash_ring = Map.get(dc_hash_rings, dc)
-    HashRing.key_to_node(dc_hash_ring, {id, facility})
+    HashRing.key_to_node(dc_hash_ring, election_name)
   end
 
   @doc """
