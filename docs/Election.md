@@ -22,21 +22,21 @@ receives acknowledgement from 2 of it's 4 _Read Replica Processes_
 
 ## Invariants
 
-- Every `Election` has a key
-- Every `Election` is registered (by key) on its node’s registry
-- Every `Election` is supervised
-- Commands are delivered to a `Election` via the `Mailroom`
-- If the `Election` is not running when a command is delivered it will
-  be started
-- If the topology has changed and a `Election`’s key no longer maps to its
-  current node, it will migrate to the correct node
-- Every `Election` has one read-only follower process (process pair) at
-  each data center
-- A `Election` processes commands and emits events
-- Before a `Election` commits an event to its event log, two of its
-  four read-only followers must acknowledge receipt of the event
-- When a `Election` starts it will ask (via `Mailroom`) if its four
-  read-only followers have state
-  - If they do, the `Election` will recover from the "best" reader
-- Each `Election`'s state contains its key, an event store, and Map for
-  event handler plugins to store projections
+- [x] Every `Election` has a key
+- [x] Every `Election` is registered (by key) on its node’s registry
+- [x] Every `Election` is supervised
+- [x] Commands are delivered to a `Election` via the `Mailroom`
+- [x] If the `Election` is not running when a command is delivered it will
+      be started
+- [ ] If the topology has changed and a `Election`’s key no longer maps to its
+      current node, it will migrate to the correct node
+- [ ] Every `Election` has one read-only follower process (process pair) at
+      each data center
+- [ ] A `Election` processes commands and emits events
+- [ ] Before a `Election` commits an event to its event log, two of its
+      four read-only followers must acknowledge receipt of the event
+- [ ] When a `Election` starts it will ask (via `Mailroom`) if its four
+      read-only followers have state
+  - [ ] If they do, the `Election` will recover from the "best" reader
+- [ ] Each `Election`'s state contains its key, an event store, and Map for
+      event handler plugins to store projections
