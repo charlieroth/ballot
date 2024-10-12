@@ -181,10 +181,10 @@ defmodule TestTopologyState do
     test "in the event of a node partition, a new node is selected for the actor", %{
       topology: topology
     } do
-      election_key = %Election.Key{id: "1001", facility: "VC-123"}
-      prev_election_node = Topology.State.get_election_node(topology, election_key)
+      key = %{id: "1001", facility: "VC-123"}
+      prev_election_node = Topology.State.get_election_node(topology, key)
       topology = Topology.State.remove_node(topology, prev_election_node)
-      new_election_node = Topology.State.get_election_node(topology, election_key)
+      new_election_node = Topology.State.get_election_node(topology, key)
       assert new_election_node != prev_election_node
     end
   end

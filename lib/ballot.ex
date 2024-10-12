@@ -22,18 +22,16 @@ defmodule Ballot do
     }
   end
 
-  @spec is_election_process_running?(election_key :: Election.Key.t()) :: boolean()
-  def is_election_process_running?(election_key) do
-    election_name = Election.Key.to_name(election_key)
-
-    case Registry.lookup(Ballot.Registry, election_name) do
+  @spec is_election_process_running?(key :: Election.key()) :: boolean()
+  def is_election_process_running?(key) do
+    case Registry.lookup(Ballot.Registry, key) do
       [{_pid, _value}] -> true
       [] -> false
     end
   end
 
-  @spec is_current_node(election_node :: Node.t()) :: boolean()
-  def is_current_node(election_node) do
-    election_node == Node.self()
+  @spec is_current_node(node :: Node.t()) :: boolean()
+  def is_current_node(node) do
+    node == Node.self()
   end
 end

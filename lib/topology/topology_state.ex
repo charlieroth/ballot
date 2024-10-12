@@ -45,15 +45,14 @@ defmodule Topology.State do
   Given a `Topology.State` and `Election.Key`, get the cluster node for
   an associated `Election` process
   """
-  @spec get_election_node(t(), Election.Key.t()) :: Node.t()
+  @spec get_election_node(t(), Election.key()) :: Node.t()
   def get_election_node(
         %Topology.State{dc_hash_rings: dc_hash_rings, cluster_hash_ring: cluster_hash_ring},
-        %Election.Key{} = election_key
+        key
       ) do
-    election_name = Election.Key.to_name(election_key)
-    dc = HashRing.key_to_node(cluster_hash_ring, election_name)
+    dc = HashRing.key_to_node(cluster_hash_ring, key)
     dc_hash_ring = Map.get(dc_hash_rings, dc)
-    HashRing.key_to_node(dc_hash_ring, election_name)
+    HashRing.key_to_node(dc_hash_ring, key)
   end
 
   @doc """

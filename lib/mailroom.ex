@@ -7,8 +7,8 @@ defmodule Mailroom do
     GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
   end
 
-  def dispatch(command) do
-    GenServer.cast(__MODULE__, {:dispatch, command})
+  def dispatch(%Message{} = msg) do
+    GenServer.cast(__MODULE__, {:dispatch, msg})
   end
 
   @impl true
@@ -23,33 +23,33 @@ defmodule Mailroom do
   end
 
   @impl true
-  def handle_cast({:dispatch, command}, state) do
-    Logger.info("[mailroom:cast] - received command: #{inspect(command)}")
+  def handle_cast({:dispatch, %Message{key: key} = msg}, state) do
+    Logger.info("[mailroom:cast] - received msg: #{inspect(msg)}")
 
     # --- Command Dispatch Protocol ---
     # If the intended receipient is a local `Election` process, 
-    election_node = Topology.get_election_node(command.election_key)
+    election_node = Topology.get_election_node(key)
     is_current_node = Ballot.is_current_node(election_node)
 
     if is_current_node do
-      is_election_process_running = Ballot.is_election_process_running?(command.election_key)
+      is_election_process_running = Ballot.is_election_process_running?(key)
 
       # If the local `Election` process is already running,
       if is_election_process_running do
         # Send command to local `Election` process
-        :ok = Election.process_command(command)
+        :ok = Election.process_msg(msg)
       else
         # If the local `Election` process is not running,
         # - Start local `Election` process
         # - Send command to local `Election` process
-        {:ok, _election_pid} = Election.Supervisor.start_child(command.election_key)
-        :ok = Election.process_command(command)
+        {:ok, _election_pid} = Election.Supervisor.start_child(key)
+        :ok = Election.process_msg(msg)
       end
     else
       # If the intended receipient is a remote `Election` process,
       # - Get the intended receipient's node
       # - Send command to remote `Mailroom` process
-      :ok = GenServer.cast({Mailroom, election_node}, {:dispatch, command})
+      :ok = GenServer.cast({Mailroom, election_node}, {:dispatch, msg})
     end
 
     {:noreply, state}

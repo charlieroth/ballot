@@ -3,34 +3,36 @@ defmodule Election do
 
   require Logger
 
-  def start_link(%Election.Key{} = election_key) do
-    GenServer.start_link(__MODULE__, election_key, name: via(election_key))
+  @type key :: %{id: String.t(), facility: String.t()}
+
+  def start_link(key) do
+    GenServer.start_link(__MODULE__, key, name: via(key))
   end
 
-  def process_command(%Election.Command.OpenElection{} = command) do
-    GenServer.call(via(command.election_key), command)
+  def get_state(key) do
+    GenServer.call(via(key), :get_state)
   end
 
-  def process_command(%Election.Command.CloseElection{} = command) do
-    GenServer.call(via(command.election_key), command)
+  def process_msg(%Message{key: key} = msg) do
+    GenServer.call(via(key), msg)
   end
 
   @impl true
-  def init(%Election.Key{} = election_key) do
-    state = Election.State.new(election_key)
+  def init(key) do
+    state = Election.State.new(key)
     {:ok, state}
   end
 
   @impl true
-  def handle_call(%Election.Command.OpenElection{} = command, _from, state) do
-    Logger.info("[election:call] - OpenElection command received: #{inspect(command)}")
-    {:reply, :ok, state}
+  def handle_call(:get_state, _from, state) do
+    {:reply, state, state}
   end
 
   @impl true
-  def handle_call(%Election.Command.CloseElection{} = command, _from, state) do
-    Logger.info("[election:call] - CloseElection command received: #{inspect(command)}")
-    {:reply, :ok, state}
+  def handle_call(%Message{} = msg, _from, state) do
+    Logger.info("[election:call] - msg received: #{inspect(msg)}")
+    new_state = Election.State.process_command(state, msg)
+    {:reply, :ok, new_state}
   end
 
   @impl true
@@ -57,9 +59,9 @@ defmodule Election do
     :ok
   end
 
-  defp via(%Election.Key{} = election_key) do
+  defp via(key) do
     {:via}
     |> Tuple.append(Registry)
-    |> Tuple.append({Ballot.Registry, Election.Key.to_name(election_key)})
+    |> Tuple.append({Ballot.Registry, key})
   end
 end

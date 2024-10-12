@@ -10,8 +10,8 @@ defmodule Election.Supervisor do
     DynamicSupervisor.init(strategy: :one_for_one)
   end
 
-  def start_child(%Election.Key{} = election_key) do
-    child_spec = {Election, election_key}
+  def start_child(key) do
+    child_spec = {Election, key}
     DynamicSupervisor.start_child(__MODULE__, child_spec)
   end
 end

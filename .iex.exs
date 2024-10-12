@@ -1,1 +1,2 @@
-election_key = %Election.Key{id: "1001", facility: "VC-123"}
+election_key = %{id: "1001", facility: "VC-100"}
+election_key2 = %{id: "2002", facility: "VC-200"}
