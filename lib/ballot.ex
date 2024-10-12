@@ -22,37 +22,18 @@ defmodule Ballot do
     }
   end
 
-  @spec parse_actor_server(actor_server :: String.t()) :: %{
-          dc: String.t(),
-          dc_az: String.t(),
-          dc_node: String.t()
-        }
-  def parse_actor_server(actor_server) do
-    [dc, dc_az, dc_node] = String.split(actor_server, "-")
+  @spec is_election_process_running?(election_key :: Election.Key.t()) :: boolean()
+  def is_election_process_running?(election_key) do
+    election_name = Election.Key.to_name(election_key)
 
-    %{
-      dc: dc,
-      dc_az: dc_az,
-      dc_node: dc_node
-    }
+    case Registry.lookup(Ballot.Registry, election_name) do
+      [{_pid, _value}] -> true
+      [] -> false
+    end
   end
 
-  @spec is_local_actor_server?(actor_server :: String.t()) :: boolean()
-  def is_local_actor_server?(actor_server) do
-    %{dc: actor_server_dc, dc_az: actor_server_dc_az, dc_node: actor_server_dc_node} =
-      parse_actor_server(actor_server)
-
-    %{dc: local_dc, dc_az: local_dc_az, dc_node: local_dc_node} = parse_node(Node.self())
-
-    actor_server_dc == local_dc and actor_server_dc_az == local_dc_az and
-      actor_server_dc_node == local_dc_node
-  end
-
-  @spec get_remote_node(actor_server :: String.t()) :: Node.t()
-  def get_remote_node(actor_server) do
-    %{dc: dc, dc_az: dc_az, dc_node: dc_node} =
-      parse_actor_server(actor_server)
-
-    :"#{dc}-#{dc_az}-#{dc_node}@localhost"
+  @spec is_current_node(election_node :: Node.t()) :: boolean()
+  def is_current_node(election_node) do
+    election_node == Node.self()
   end
 end

@@ -42,10 +42,11 @@ defmodule Topology.State do
   end
 
   @doc """
-  Get the actor server for a given actor key
+  Given a `Topology.State` and `Election.Key`, get the cluster node for
+  an associated `Election` process
   """
-  @spec get_actor_server(t(), Election.Key.t()) :: String.t()
-  def get_actor_server(
+  @spec get_election_node(t(), Election.Key.t()) :: Node.t()
+  def get_election_node(
         %Topology.State{dc_hash_rings: dc_hash_rings, cluster_hash_ring: cluster_hash_ring},
         %Election.Key{} = election_key
       ) do
@@ -56,13 +57,13 @@ defmodule Topology.State do
   end
 
   @doc """
-  Add a node to the topology.
+  Add a `Node` to the `Topology.State`.
   """
-  @spec add_node(t(), atom()) :: t()
+  @spec add_node(t(), Node.t()) :: t()
   def add_node(%Topology.State{} = state, node) do
-    %{dc: dc, name: name} = Ballot.parse_node(node)
+    %{dc: dc} = Ballot.parse_node(node)
     dc_hash_ring = Map.get(state.dc_hash_rings, dc, HashRing.new())
-    dc_hash_ring = HashRing.add_node(dc_hash_ring, name)
+    dc_hash_ring = HashRing.add_node(dc_hash_ring, node)
     new_dc_hash_rings = Map.put(state.dc_hash_rings, dc, dc_hash_ring)
 
     %Topology.State{
@@ -73,13 +74,13 @@ defmodule Topology.State do
   end
 
   @doc """
-  Remove a node from the topology.
+  Remove a `Node` from the `Topology.State`.
   """
-  @spec remove_node(t(), atom()) :: t()
+  @spec remove_node(t(), Node.t()) :: t()
   def remove_node(%Topology.State{} = state, node) do
-    %{dc: dc, name: name} = Ballot.parse_node(node)
+    %{dc: dc} = Ballot.parse_node(node)
     dc_hash_ring = Map.get(state.dc_hash_rings, dc)
-    dc_hash_ring = HashRing.remove_node(dc_hash_ring, name)
+    dc_hash_ring = HashRing.remove_node(dc_hash_ring, node)
     dc_hash_ring_nodes = HashRing.nodes(dc_hash_ring)
 
     if length(dc_hash_ring_nodes) == 0 do

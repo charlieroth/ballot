@@ -5,10 +5,15 @@ defmodule TestTopologyState do
     topology = %Topology.State{
       cluster_hash_ring: HashRing.add_nodes(HashRing.new(), ["MI", "IN", "IL", "OH"]),
       dc_hash_rings: %{
-        "MI" => HashRing.add_nodes(HashRing.new(), ["MI-A-1", "MI-B-1", "MI-B-4"]),
-        "IN" => HashRing.add_node(HashRing.new(), "IN-B-2"),
-        "IL" => HashRing.add_node(HashRing.new(), "IL-B-3"),
-        "OH" => HashRing.add_node(HashRing.new(), "OH-A-4")
+        "MI" =>
+          HashRing.add_nodes(HashRing.new(), [
+            :"MI-A-1@localhost",
+            :"MI-B-1@localhost",
+            :"MI-B-4@localhost"
+          ]),
+        "IN" => HashRing.add_node(HashRing.new(), :"IN-B-2@localhost"),
+        "IL" => HashRing.add_node(HashRing.new(), :"IL-B-3@localhost"),
+        "OH" => HashRing.add_node(HashRing.new(), :"OH-A-4@localhost")
       }
     }
 
@@ -21,7 +26,7 @@ defmodule TestTopologyState do
 
       assert topology == %Topology.State{
                dc_hash_rings: %{
-                 "MI" => HashRing.add_nodes(HashRing.new(), ["MI-A-1"])
+                 "MI" => HashRing.add_nodes(HashRing.new(), [:"MI-A-1@localhost"])
                },
                cluster_hash_ring: HashRing.add_nodes(HashRing.new(), ["MI"])
              }
@@ -32,7 +37,7 @@ defmodule TestTopologyState do
 
       expected_toplogy = %Topology.State{
         dc_hash_rings: %{
-          "MI" => HashRing.add_nodes(HashRing.new(), ["MI-A-1"])
+          "MI" => HashRing.add_nodes(HashRing.new(), [:"MI-A-1@localhost"])
         },
         cluster_hash_ring: HashRing.add_nodes(HashRing.new(), ["MI"])
       }
@@ -48,8 +53,8 @@ defmodule TestTopologyState do
 
       expected_toplogy = %Topology.State{
         dc_hash_rings: %{
-          "MI" => HashRing.add_nodes(HashRing.new(), ["MI-A-1"]),
-          "IN" => HashRing.add_nodes(HashRing.new(), ["IN-A-1"])
+          "MI" => HashRing.add_nodes(HashRing.new(), [:"MI-A-1@localhost"]),
+          "IN" => HashRing.add_nodes(HashRing.new(), [:"IN-A-1@localhost"])
         },
         cluster_hash_ring: HashRing.add_nodes(HashRing.new(), ["MI", "IN"])
       }
@@ -65,9 +70,9 @@ defmodule TestTopologyState do
 
       expected_toplogy = %Topology.State{
         dc_hash_rings: %{
-          "MI" => HashRing.add_nodes(HashRing.new(), ["MI-A-1"]),
-          "IN" => HashRing.add_nodes(HashRing.new(), ["IN-A-1"]),
-          "IL" => HashRing.add_nodes(HashRing.new(), ["IL-A-1"])
+          "MI" => HashRing.add_nodes(HashRing.new(), [:"MI-A-1@localhost"]),
+          "IN" => HashRing.add_nodes(HashRing.new(), [:"IN-A-1@localhost"]),
+          "IL" => HashRing.add_nodes(HashRing.new(), [:"IL-A-1@localhost"])
         },
         cluster_hash_ring: HashRing.add_nodes(HashRing.new(), ["MI", "IN", "IL"])
       }
@@ -90,9 +95,14 @@ defmodule TestTopologyState do
       expected_toplogy = %Topology.State{
         cluster_hash_ring: HashRing.add_nodes(HashRing.new(), ["MI", "IL", "OH"]),
         dc_hash_rings: %{
-          "MI" => HashRing.add_nodes(HashRing.new(), ["MI-A-1", "MI-B-1", "MI-B-4"]),
-          "IL" => HashRing.add_node(HashRing.new(), "IL-B-3"),
-          "OH" => HashRing.add_node(HashRing.new(), "OH-A-4")
+          "MI" =>
+            HashRing.add_nodes(HashRing.new(), [
+              :"MI-A-1@localhost",
+              :"MI-B-1@localhost",
+              :"MI-B-4@localhost"
+            ]),
+          "IL" => HashRing.add_node(HashRing.new(), :"IL-B-3@localhost"),
+          "OH" => HashRing.add_node(HashRing.new(), :"OH-A-4@localhost")
         }
       }
 
@@ -110,10 +120,10 @@ defmodule TestTopologyState do
       expected_toplogy = %Topology.State{
         cluster_hash_ring: HashRing.add_nodes(HashRing.new(), ["MI", "IN", "IL", "OH"]),
         dc_hash_rings: %{
-          "MI" => HashRing.add_nodes(HashRing.new(), ["MI-B-1", "MI-B-4"]),
-          "IN" => HashRing.add_node(HashRing.new(), "IN-B-2"),
-          "IL" => HashRing.add_node(HashRing.new(), "IL-B-3"),
-          "OH" => HashRing.add_node(HashRing.new(), "OH-A-4")
+          "MI" => HashRing.add_nodes(HashRing.new(), [:"MI-B-1@localhost", :"MI-B-4@localhost"]),
+          "IN" => HashRing.add_node(HashRing.new(), :"IN-B-2@localhost"),
+          "IL" => HashRing.add_node(HashRing.new(), :"IL-B-3@localhost"),
+          "OH" => HashRing.add_node(HashRing.new(), :"OH-A-4@localhost")
         }
       }
 
@@ -141,10 +151,15 @@ defmodule TestTopologyState do
       current = Topology.State.get_current(topology)
 
       assert current == %{
-               "MI" => HashRing.add_nodes(HashRing.new(), ["MI-A-1", "MI-B-1", "MI-B-4"]),
-               "IN" => HashRing.add_node(HashRing.new(), "IN-B-2"),
-               "IL" => HashRing.add_node(HashRing.new(), "IL-B-3"),
-               "OH" => HashRing.add_node(HashRing.new(), "OH-A-4")
+               "MI" =>
+                 HashRing.add_nodes(HashRing.new(), [
+                   :"MI-A-1@localhost",
+                   :"MI-B-1@localhost",
+                   :"MI-B-4@localhost"
+                 ]),
+               "IN" => HashRing.add_node(HashRing.new(), :"IN-B-2@localhost"),
+               "IL" => HashRing.add_node(HashRing.new(), :"IL-B-3@localhost"),
+               "OH" => HashRing.add_node(HashRing.new(), :"OH-A-4@localhost")
              }
     end
   end
@@ -152,19 +167,25 @@ defmodule TestTopologyState do
   describe "get_dc_hash_ring/2" do
     test "returns the dc_hash_ring for a given data center", %{topology: topology} do
       dc_hash_ring = Topology.State.get_dc_hash_ring(topology, "MI")
-      assert dc_hash_ring == HashRing.add_nodes(HashRing.new(), ["MI-A-1", "MI-B-1", "MI-B-4"])
+
+      assert dc_hash_ring ==
+               HashRing.add_nodes(HashRing.new(), [
+                 :"MI-A-1@localhost",
+                 :"MI-B-1@localhost",
+                 :"MI-B-4@localhost"
+               ])
     end
   end
 
-  describe "get_actor_server/2" do
+  describe "get_election_node/2" do
     test "in the event of a node partition, a new node is selected for the actor", %{
       topology: topology
     } do
-      key = %{id: "1001", facility: "VC-123"}
-      actor_server = Topology.State.get_actor_server(topology, key)
-      topology = Topology.State.remove_node(topology, :"#{actor_server}@localhost")
-      new_actor_server = Topology.State.get_actor_server(topology, key)
-      assert new_actor_server != actor_server
+      election_key = %Election.Key{id: "1001", facility: "VC-123"}
+      prev_election_node = Topology.State.get_election_node(topology, election_key)
+      topology = Topology.State.remove_node(topology, prev_election_node)
+      new_election_node = Topology.State.get_election_node(topology, election_key)
+      assert new_election_node != prev_election_node
     end
   end
 end

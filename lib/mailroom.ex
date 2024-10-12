@@ -25,18 +25,33 @@ defmodule Mailroom do
   @impl true
   def handle_cast({:dispatch, command}, state) do
     Logger.info("[mailroom:cast] - received command: #{inspect(command)}")
-    # actor_server = Topology.get_actor_server(command.key)
 
-    # TODO: Implement command dispatch protocol
-    # 1) If the intended receipient is a local `Election` process, 
-    #  1a) If the local `Election` process is already running,
-    #    1a1) Send command to local `Election` process
-    #  1b) If the local `Election` process is not running,
-    #    1b1) Start local `Election` process
-    #    1b2) Send command to local `Election` process
-    # 2) If the intended receipient is a remote `Election` process,
-    #  2a) Get the intended receipient's node
-    #  2b) Send command to remote `Mailroom` process
+    # --- Command Dispatch Protocol ---
+    # If the intended receipient is a local `Election` process, 
+    election_node = Topology.get_election_node(command.election_key)
+    is_current_node = Ballot.is_current_node(election_node)
+
+    if is_current_node do
+      is_election_process_running = Ballot.is_election_process_running?(command.election_key)
+
+      # If the local `Election` process is already running,
+      if is_election_process_running do
+        # Send command to local `Election` process
+        :ok = Election.process_command(command)
+      else
+        # If the local `Election` process is not running,
+        # - Start local `Election` process
+        # - Send command to local `Election` process
+        {:ok, _election_pid} = Election.Supervisor.start_child(command.election_key)
+        :ok = Election.process_command(command)
+      end
+    else
+      # If the intended receipient is a remote `Election` process,
+      # - Get the intended receipient's node
+      # - Send command to remote `Mailroom` process
+      :ok = GenServer.cast({Mailroom, election_node}, {:dispatch, command})
+    end
+
     {:noreply, state}
   end
 

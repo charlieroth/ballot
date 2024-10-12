@@ -7,12 +7,12 @@ defmodule Election do
     GenServer.start_link(__MODULE__, election_key, name: via(election_key))
   end
 
-  def open_election(%Election.Key{} = election_key, %Election.Command.OpenElection{} = command) do
-    GenServer.call(via(election_key), command)
+  def process_command(%Election.Command.OpenElection{} = command) do
+    GenServer.call(via(command.election_key), command)
   end
 
-  def close_election(%Election.Key{} = election_key, %Election.Command.CloseElection{} = command) do
-    GenServer.call(via(election_key), command)
+  def process_command(%Election.Command.CloseElection{} = command) do
+    GenServer.call(via(command.election_key), command)
   end
 
   @impl true

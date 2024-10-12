@@ -4,17 +4,16 @@ defmodule Election.Command.CloseElection do
   """
 
   @type t :: %__MODULE__{
-          election_id: String.t(),
-          facility: String.t()
+          election_key: Election.Key.t()
         }
 
-  defstruct [:election_id, :facility]
+  defstruct [:election_key]
 
-  @spec new(String.t(), String.t()) :: t()
-  def new(election_id, facility) do
+  @spec new(election_key :: Election.Key.t()) ::
+          t()
+  def new(election_key) do
     %__MODULE__{
-      election_id: election_id,
-      facility: facility
+      election_key: election_key
     }
   end
 end

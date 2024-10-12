@@ -32,11 +32,11 @@ defmodule Topology do
   end
 
   @doc """
-  Get cluster node location for an actor server. 
+  Given an `Election.Key`, get cluster node location for an election process
   """
-  @spec get_actor_server(key :: Election.Key.t()) :: String.t()
-  def get_actor_server(%Election.Key{} = election_key) do
-    GenServer.call(__MODULE__, {:get_actor_server, election_key})
+  @spec get_election_node(election_key :: Election.Key.t()) :: Node.t()
+  def get_election_node(%Election.Key{} = election_key) do
+    GenServer.call(__MODULE__, {:get_election_node, election_key})
   end
 
   @impl true
@@ -68,8 +68,8 @@ defmodule Topology do
   end
 
   @impl true
-  def handle_call({:get_actor_server, %Election.Key{} = election_key}, _from, state) do
-    {:reply, Topology.State.get_actor_server(state, election_key), state}
+  def handle_call({:get_election_node, %Election.Key{} = election_key}, _from, state) do
+    {:reply, Topology.State.get_election_node(state, election_key), state}
   end
 
   @impl true
