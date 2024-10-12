@@ -6,6 +6,6 @@ defmodule Election.State do
   defstruct [:key]
 
   def new(%Election.Key{} = election_key) do
-    %Election.State{key: %Election.Key{} = election_key}
+    %Election.State{key: election_key}
   end
 end
