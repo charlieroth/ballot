@@ -1,24 +1,25 @@
 # Election
 
-This main actor in the Ballot System is an `Election`. It processes commands
+The main actor process in a Ballot System is an `Election`, processing commands
 and emits events.
 
-An `Election` is an actor process, a digital twin of a election being carried
-out by humans. An `Election` is a long-running process that will be alive
-for the entirety of an election and for however long those election results are
-desired to live in the Ballot system. An `Election` process is alive for a
-minimum of 21 days.
+An `Election` is a digital twin of a election being carried out in the physical
+world. An `Election` is a long-running process that will be alive for the
+entirety of an election and for however long those election results are desired
+to live in a Ballot system. An `Election` process is alive for a minimum of
+21 days.
 
-An `Election` contains all events the entire lifecycle of an election.
+An `Election` contains all events for the entire lifecycle of an election.
 
 An `Election` is designed as a _Process Pair_, popularized by Jim Gray's
-Tandem Computing. Practically, for each election there is a _Writer Process_
-which receives and processes all commands for a given election. This
-_Writer Process_ also has 4 _Read Replica Processes_ to ensure high
+Tandem Computing. For each election there is a _Writer Process_
+which receives and processes all commands for a given election. A
+_Writer Process_ has 4 _Read Replica Processes_ to ensure high
 availability of election data.
 
-A message is considered "acknowledged" if the `Election` writer processes
-receives acknowledgement from 2 of it's 4 _Read Replica Processes_
+A command is considered acknowledged if a _Writer Process_ receives
+acknowledgement from 2 of it's 4 _Read Replica Processes_. Ensuring that
+3 of the 5 `Election` proccesses have processed the same command.
 
 ## Invariants
 
