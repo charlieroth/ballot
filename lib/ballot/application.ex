@@ -36,6 +36,8 @@ defmodule Ballot.Application do
   end
 
   def get_children(:test) do
-    []
+    [
+      {Registry, keys: :unique, name: Ballot.Registry}
+    ]
   end
 end
