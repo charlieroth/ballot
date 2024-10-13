@@ -23,8 +23,8 @@ defmodule Mailroom do
   end
 
   @impl true
-  def handle_cast({:dispatch, %Message{key: key} = msg}, state) do
-    Logger.info("[mailroom:cast] - received msg: #{inspect(msg)}")
+  def handle_cast({:dispatch, %Message{key: key} = cmd}, state) do
+    Logger.info("[mailroom:cast] - received cmd: #{inspect(cmd)}")
 
     # --- Command Dispatch Protocol ---
     # If the intended receipient is a local `Election` process, 
@@ -37,19 +37,19 @@ defmodule Mailroom do
       # If the local `Election` process is already running,
       if is_election_process_running do
         # Send command to local `Election` process
-        :ok = Election.process_msg(msg)
+        :ok = Election.process_command(cmd)
       else
         # If the local `Election` process is not running,
         # - Start local `Election` process
         # - Send command to local `Election` process
         {:ok, _election_pid} = Election.Supervisor.start_child(key)
-        :ok = Election.process_msg(msg)
+        :ok = Election.process_command(cmd)
       end
     else
       # If the intended receipient is a remote `Election` process,
       # - Get the intended receipient's node
       # - Send command to remote `Mailroom` process
-      :ok = GenServer.cast({Mailroom, election_node}, {:dispatch, msg})
+      :ok = GenServer.cast({Mailroom, election_node}, {:dispatch, cmd})
     end
 
     {:noreply, state}

@@ -13,8 +13,8 @@ defmodule Election do
     GenServer.call(via(key), :get_state)
   end
 
-  def process_msg(%Message{key: key} = msg) do
-    GenServer.call(via(key), msg)
+  def process_command(%Message{key: key} = cmd) do
+    GenServer.call(via(key), cmd)
   end
 
   @impl true

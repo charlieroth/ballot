@@ -1,9 +1,7 @@
 defmodule Message do
-  @type message_kind :: :open_election | :election_opened | :close_election | :election_closed
-
   @type t :: %{
           key: Election.key(),
-          kind: message_kind(),
+          kind: atom(),
           payload: map()
         }
 
