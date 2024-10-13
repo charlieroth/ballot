@@ -1,6 +1,13 @@
 defmodule Ballot do
   @moduledoc false
 
+  @spec via(key :: Election.key()) :: tuple()
+  def via(key) do
+    {:via}
+    |> Tuple.append(Registry)
+    |> Tuple.append({Ballot.Registry, key})
+  end
+
   @spec parse_node(node :: Node.t()) :: %{
           name: String.t(),
           host: String.t(),
