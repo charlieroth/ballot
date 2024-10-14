@@ -21,7 +21,8 @@ defmodule Ballot.MixProject do
   defp deps do
     [
       {:libring, "~> 1.7"},
-      {:libcluster, "~> 3.4"}
+      {:libcluster, "~> 3.4"},
+      {:stream_data, "~> 1.1", only: :test}
     ]
   end
 end
