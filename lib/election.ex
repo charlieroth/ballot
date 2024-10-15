@@ -47,102 +47,215 @@ defmodule Election do
 
   @impl true
   def handle_call(%Message{} = cmd, _from, state) do
-    Logger.info("[election:call] - cmd received: #{inspect(cmd)}")
-    event = handle_command(cmd, state)
+    Logger.debug("[election:call] - cmd received: #{inspect(cmd)}")
 
-    {:ok, projections, _side_effects} =
-      handle_event(state.key, state.projections, event, state.event_store)
+    with {:ok, event} <- handle_command(cmd, state),
+         {:ok, projections, _side_effects} <-
+           handle_event(state.key, state.projections, event, state.event_store) do
+      new_state =
+        state
+        |> Map.put(:event_store, [event | state.event_store])
+        |> Map.put(:projections, projections)
 
-    new_state =
-      state
-      |> Map.put(:event_store, [event | state.event_store])
-      |> Map.put(:projections, projections)
-
-    {:reply, :ok, new_state}
+      {:reply, :ok, new_state}
+    else
+      error ->
+        {:reply, error, state}
+    end
   end
 
   @impl true
   def handle_call(msg, _from, state) do
-    Logger.info("[election:call] - unknown call: #{inspect(msg)}")
+    Logger.warning("[election:call] - unknown call: #{inspect(msg)}")
     {:reply, nil, state}
   end
 
   @impl true
   def handle_cast(msg, state) do
-    Logger.info("[election:cast] - unknown cast: #{inspect(msg)}")
+    Logger.warning("[election:cast] - unknown cast: #{inspect(msg)}")
     {:noreply, state}
   end
 
   @impl true
   def handle_info(msg, state) do
-    Logger.info("[election:info] - unknown info: #{inspect(msg)}")
+    Logger.warning("[election:info] - unknown info: #{inspect(msg)}")
     {:noreply, state}
   end
 
   @impl true
   def terminate(reason, _state) do
-    Logger.info("[election:terminate] - terminating: #{inspect(reason)}")
+    Logger.warning("[election:terminate] - terminating: #{inspect(reason)}")
     :ok
   end
 
-  @spec handle_command(cmd :: Message.t(), state :: state()) :: Message.t()
-  def handle_command(%Message{kind: :open_election} = _cmd, state) do
-    %Message{
-      key: state.key,
-      kind: :election_opened,
-      payload: %{}
-    }
+  @spec handle_command(cmd :: Message.t(), state :: state()) ::
+          {:ok, Message.t()} | {:error, atom()}
+  def handle_command(%Message{kind: :open_election} = cmd, state) do
+    with true <- can_open_election?(state) do
+      {:ok,
+       %Message{
+         key: state.key,
+         kind: :election_opened,
+         payload: cmd.payload
+       }}
+    else
+      _ -> {:error, :failed_to_open_election}
+    end
   end
 
-  @spec handle_command(cmd :: Message.t(), state :: state()) :: Message.t()
-  def handle_command(%Message{kind: :cast_ballot} = _cmd, state) do
-    %Message{
-      key: state.key,
-      kind: :ballot_casted,
-      payload: %{}
-    }
+  def handle_command(%Message{kind: :close_election} = cmd, state) do
+    with true <- can_close_election?(state) do
+      {:ok,
+       %Message{
+         key: state.key,
+         kind: :election_closed,
+         payload: cmd.payload
+       }}
+    else
+      _ -> {:error, :failed_to_close_election}
+    end
   end
 
-  @spec handle_command(cmd :: Message.t(), state :: state()) :: Message.t()
-  def handle_command(%Message{kind: :validate_ballot} = _cmd, state) do
-    %Message{
-      key: state.key,
-      kind: :ballot_validated,
-      payload: %{}
-    }
+  def handle_command(%Message{kind: :validate_election} = cmd, state) do
+    with true <- can_validate_election?(state) do
+      {:ok,
+       %Message{
+         key: state.key,
+         kind: :election_validated,
+         payload: cmd.payload
+       }}
+    else
+      _ -> {:error, :failed_to_validate_election}
+    end
   end
 
-  @spec handle_command(cmd :: Message.t(), state :: state()) :: Message.t()
-  def handle_command(%Message{kind: :invalidate_ballot} = _cmd, state) do
-    %Message{
-      key: state.key,
-      kind: :ballot_invalidated,
-      payload: %{}
-    }
+  def handle_command(%Message{kind: :invalidate_election} = cmd, state) do
+    with true <- can_invalidate_election?(state) do
+      {:ok,
+       %Message{
+         key: state.key,
+         kind: :election_invalidated,
+         payload: cmd.payload
+       }}
+    else
+      _ -> {:error, :failed_to_invalidate_election}
+    end
   end
 
-  def handle_command(%Message{kind: :close_election} = _cmd, state) do
-    %Message{
-      key: state.key,
-      kind: :election_closed,
-      payload: %{}
-    }
+  def handle_command(%Message{kind: :cast_ballot} = cmd, state) do
+    with true <- can_cast_ballot?(cmd, state) do
+      {:ok,
+       %Message{
+         key: state.key,
+         kind: :ballot_casted,
+         payload: cmd.payload
+       }}
+    else
+      _ -> {:error, :failed_to_cast_ballot}
+    end
   end
 
-  def handle_command(%Message{kind: :validate_election} = _cmd, state) do
-    %Message{
-      key: state.key,
-      kind: :election_validated,
-      payload: %{}
-    }
+  def handle_command(%Message{kind: :validate_ballot} = cmd, state) do
+    with true <- can_validate_ballot?(cmd, state) do
+      {:ok,
+       %Message{
+         key: state.key,
+         kind: :ballot_validated,
+         payload: cmd.payload
+       }}
+    else
+      _ -> {:error, :failed_to_validate_ballot}
+    end
   end
 
-  def handle_command(%Message{kind: :invalidate_election} = _cmd, state) do
-    %Message{
-      key: state.key,
-      kind: :election_invalidated,
-      payload: %{}
-    }
+  def handle_command(%Message{kind: :invalidate_ballot} = cmd, state) do
+    with true <- can_invalidate_ballot?(cmd, state) do
+      {:ok,
+       %Message{
+         key: state.key,
+         kind: :ballot_invalidated,
+         payload: cmd.payload
+       }}
+    else
+      _ -> {:error, :failed_to_invalidate_ballot}
+    end
+  end
+
+  @spec can_open_election?(state :: state()) :: boolean()
+  def can_open_election?(state) do
+    state.projections.status == :idle or state.projections.status == :invalid
+  end
+
+  @spec can_close_election?(state :: state()) :: boolean()
+  def can_close_election?(state) do
+    state.projections.status == :open
+  end
+
+  @spec can_validate_election?(state :: state()) :: boolean()
+  def can_validate_election?(state) do
+    state.projections.status == :closed
+  end
+
+  @spec can_invalidate_election?(state :: state()) :: boolean()
+  def can_invalidate_election?(state) do
+    state.projections.status == :closed
+  end
+
+  @spec can_cast_ballot?(cmd :: Message.t(), state :: state()) :: boolean()
+  def can_cast_ballot?(
+        %Message{kind: :cast_ballot, payload: payload},
+        state
+      ) do
+    election_is_open = state.projections.status == :open
+
+    contains_casted_ballot_with_same_signature =
+      state.event_store
+      |> Enum.filter(fn event ->
+        event.kind == :ballot_casted
+      end)
+      |> Enum.any?(fn event ->
+        event.payload.voter_signature == payload.voter_signature
+      end)
+
+    election_is_open and not contains_casted_ballot_with_same_signature
+  end
+
+  @spec can_validate_ballot?(cmd :: Message.t(), state :: state()) :: boolean()
+  def can_validate_ballot?(
+        %Message{kind: :validate_ballot, payload: payload},
+        state
+      ) do
+    election_is_closed = state.projections.status == :closed
+
+    contains_casted_ballot_with_same_signature =
+      state.event_store
+      |> Enum.filter(fn event ->
+        event.kind == :ballot_casted
+      end)
+      |> Enum.any?(fn event ->
+        event.payload.voter_signature == payload.voter_signature
+      end)
+
+    election_is_closed and contains_casted_ballot_with_same_signature
+  end
+
+  @spec can_invalidate_ballot?(cmd :: Message.t(), state :: state()) :: boolean()
+  def can_invalidate_ballot?(
+        %Message{kind: :invalidate_ballot, payload: payload},
+        state
+      ) do
+    election_is_closed = state.projections.status == :closed
+
+    contains_casted_ballot_with_same_signature =
+      state.event_store
+      |> Enum.filter(fn event ->
+        event.kind == :ballot_casted
+      end)
+      |> Enum.any?(fn event ->
+        event.payload.voter_signature == payload.voter_signature
+      end)
+
+    election_is_closed and contains_casted_ballot_with_same_signature
   end
 
   @spec handle_event(
@@ -153,6 +266,26 @@ defmodule Election do
         ) :: {:ok, projections(), side_effects()}
   def handle_event(_key, projections, %Message{kind: :election_opened} = _event, _event_store) do
     new_projections = Map.update!(projections, :status, fn _status -> :open end)
+    {:ok, new_projections, %{}}
+  end
+
+  def handle_event(_key, projections, %Message{kind: :election_closed} = _event, _event_store) do
+    new_projections = Map.update!(projections, :status, fn _status -> :closed end)
+    {:ok, new_projections, %{}}
+  end
+
+  def handle_event(_key, projections, %Message{kind: :election_validated} = _event, _event_store) do
+    new_projections = Map.update!(projections, :status, fn _status -> :valid end)
+    {:ok, new_projections, %{}}
+  end
+
+  def handle_event(
+        _key,
+        projections,
+        %Message{kind: :election_invalidated} = _event,
+        _event_store
+      ) do
+    new_projections = Map.update!(projections, :status, fn _status -> :invalid end)
     {:ok, new_projections, %{}}
   end
 
@@ -183,23 +316,8 @@ defmodule Election do
     {:ok, new_projections, %{}}
   end
 
-  def handle_event(_key, projections, %Message{kind: :election_closed} = _event, _event_store) do
-    new_projections = Map.update!(projections, :status, fn _status -> :closed end)
-    {:ok, new_projections, %{}}
-  end
-
-  def handle_event(_key, projections, %Message{kind: :election_validated} = _event, _event_store) do
-    new_projections = Map.update!(projections, :status, fn _status -> :valid end)
-    {:ok, new_projections, %{}}
-  end
-
-  def handle_event(
-        _key,
-        projections,
-        %Message{kind: :election_invalidated} = _event,
-        _event_store
-      ) do
-    new_projections = Map.update!(projections, :status, fn _status -> :invalid end)
-    {:ok, new_projections, %{}}
+  def handle_event(_key, projections, event, _event_store) do
+    Logger.warning("[election:handle_event] - unknown event: #{inspect(event)}")
+    {:ok, projections, %{}}
   end
 end

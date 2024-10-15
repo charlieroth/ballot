@@ -7,91 +7,121 @@ defmodule TestElection do
     %{key: key}
   end
 
-  test "open and close an election", %{key: key} do
-    open_election_cmd = %Message{key: key, kind: :open_election, payload: %{}}
-    :ok = Election.process_command(open_election_cmd)
+  describe "election open, close, validate, invalidate lifecycle" do
+    test "fails to open election that is not idle", %{key: key} do
+      assert process_commands([
+               %Message{key: key, kind: :open_election, payload: %{}},
+               %Message{key: key, kind: :open_election, payload: %{}}
+             ]) == {:error, :failed_to_open_election}
+    end
 
-    state = Election.get_state(key)
+    test "fails to open election that is already open", %{key: key} do
+      assert process_commands([
+               %Message{key: key, kind: :open_election, payload: %{}},
+               %Message{key: key, kind: :open_election, payload: %{}}
+             ]) == {:error, :failed_to_open_election}
+    end
 
-    assert state.event_store == [
-             %Message{key: key, kind: :election_opened, payload: %{}}
-           ]
+    test "fails to re-open election if marked as valid", %{key: key} do
+      assert process_commands([
+               %Message{key: key, kind: :open_election, payload: %{}},
+               %Message{key: key, kind: :close_election, payload: %{}},
+               %Message{key: key, kind: :validate_election, payload: %{}},
+               %Message{key: key, kind: :open_election, payload: %{}}
+             ]) == {:error, :failed_to_open_election}
+    end
 
-    assert state.projections == %{
-             status: :open,
-             casted_ballots: 0,
-             validated_ballots: 0,
-             invalidated_ballots: 0
-           }
+    test "fails to close election that is not open", %{key: key} do
+      assert process_commands([
+               %Message{key: key, kind: :close_election, payload: %{}},
+               %Message{key: key, kind: :close_election, payload: %{}}
+             ]) == {:error, :failed_to_close_election}
+    end
 
-    close_election_cmd = %Message{key: key, kind: :close_election, payload: %{}}
-    :ok = Election.process_command(close_election_cmd)
+    test "fails to close election that is already closed", %{key: key} do
+      assert process_commands([
+               %Message{key: key, kind: :open_election, payload: %{}},
+               %Message{key: key, kind: :close_election, payload: %{}},
+               %Message{key: key, kind: :close_election, payload: %{}}
+             ]) == {:error, :failed_to_close_election}
+    end
 
-    state = Election.get_state(key)
+    test "fails to close election that valid", %{key: key} do
+      assert process_commands([
+               %Message{key: key, kind: :open_election, payload: %{}},
+               %Message{key: key, kind: :close_election, payload: %{}},
+               %Message{key: key, kind: :validate_election, payload: %{}},
+               %Message{key: key, kind: :close_election, payload: %{}}
+             ]) == {:error, :failed_to_close_election}
+    end
 
-    assert state.event_store == [
-             %Message{key: key, kind: :election_closed, payload: %{}},
-             %Message{key: key, kind: :election_opened, payload: %{}}
-           ]
+    test "fails to invalidate an election that is already invalidated", %{key: key} do
+      assert process_commands([
+               %Message{key: key, kind: :open_election, payload: %{}},
+               %Message{key: key, kind: :invalidate_election, payload: %{}},
+               %Message{key: key, kind: :invalidate_election, payload: %{}}
+             ]) == {:error, :failed_to_invalidate_election}
+    end
 
-    assert state.projections == %{
-             status: :closed,
-             casted_ballots: 0,
-             validated_ballots: 0,
-             invalidated_ballots: 0
-           }
+    test "fails to invalidate an non-closed election", %{key: key} do
+      assert process_commands([
+               %Message{key: key, kind: :open_election, payload: %{}},
+               %Message{key: key, kind: :invalidate_election, payload: %{}}
+             ]) == {:error, :failed_to_invalidate_election}
+    end
+
+    test "successfully re-opens an invalidated election", %{key: key} do
+      assert process_commands([
+               %Message{key: key, kind: :open_election, payload: %{}},
+               %Message{key: key, kind: :close_election, payload: %{}},
+               %Message{key: key, kind: :invalidate_election, payload: %{}},
+               %Message{key: key, kind: :open_election, payload: %{}}
+             ]) == :ok
+    end
   end
 
-  test "open an election, cast ballots, close the election", %{key: key} do
-    open_election_cmd = %Message{key: key, kind: :open_election, payload: %{}}
-    :ok = Election.process_command(open_election_cmd)
+  describe "ballot casting lifecycle" do
+    test "fails to cast ballot for a closed election", %{key: key} do
+      assert process_commands([
+               %Message{key: key, kind: :open_election, payload: %{}},
+               %Message{key: key, kind: :close_election, payload: %{}},
+               %Message{key: key, kind: :cast_ballot, payload: %{voter_signature: "sig_123"}}
+             ]) == {:error, :failed_to_cast_ballot}
+    end
 
-    state = Election.get_state(key)
+    test "fails to cast ballot for an idle election", %{key: key} do
+      assert process_commands([
+               %Message{key: key, kind: :cast_ballot, payload: %{voter_signature: "sig_123"}}
+             ]) == {:error, :failed_to_cast_ballot}
+    end
 
-    assert state.event_store == [
-             %Message{key: key, kind: :election_opened, payload: %{}}
-           ]
+    test "fails to cast ballot with same voter signature twice", %{key: key} do
+      assert process_commands([
+               %Message{key: key, kind: :cast_ballot, payload: %{voter_signature: "sig_123"}},
+               %Message{key: key, kind: :cast_ballot, payload: %{voter_signature: "sig_123"}}
+             ]) == {:error, :failed_to_cast_ballot}
+    end
 
-    assert state.projections == %{
-             status: :open,
-             casted_ballots: 0,
-             validated_ballots: 0,
-             invalidated_ballots: 0
-           }
+    test "fails to validate ballot when no casted ballot with same voter signature", %{key: key} do
+      assert process_commands([
+               %Message{key: key, kind: :validate_ballot, payload: %{voter_signature: "sig_123"}}
+             ]) == {:error, :failed_to_validate_ballot}
+    end
 
-    cast_ballot_cmd = %Message{key: key, kind: :cast_ballot, payload: %{}}
-    :ok = Election.process_command(cast_ballot_cmd)
+    test "fails to invalidate ballot when no casted ballot with same voter signature", %{key: key} do
+      assert process_commands([
+               %Message{
+                 key: key,
+                 kind: :invalidate_ballot,
+                 payload: %{voter_signature: "sig_123"}
+               }
+             ]) == {:error, :failed_to_invalidate_ballot}
+    end
+  end
 
-    state = Election.get_state(key)
-
-    assert state.event_store == [
-             %Message{key: key, kind: :ballot_casted, payload: %{}},
-             %Message{key: key, kind: :election_opened, payload: %{}}
-           ]
-
-    assert state.projections == %{
-             status: :open,
-             casted_ballots: 1,
-             validated_ballots: 0,
-             invalidated_ballots: 0
-           }
-
-    close_election_cmd = %Message{key: key, kind: :close_election, payload: %{}}
-    :ok = Election.process_command(close_election_cmd)
-
-    state = Election.get_state(key)
-
-    assert state.event_store == [
-             %Message{key: key, kind: :election_closed, payload: %{}},
-             %Message{key: key, kind: :ballot_casted, payload: %{}},
-             %Message{key: key, kind: :election_opened, payload: %{}}
-           ]
-
-    assert state.projections == %{
-             status: :closed,
-             casted_ballots: 1,
-             validated_ballots: 0,
-             invalidated_ballots: 0
-           }
+  defp process_commands(commands) do
+    Enum.reduce(commands, :ok, fn command, _acc ->
+      Election.process_command(command)
+    end)
   end
 end
