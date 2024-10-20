@@ -17,6 +17,12 @@ defmodule Mailroom do
   end
 
   @impl true
+  def handle_call(%Message{kind: :start_reader, key: key} = _cmd, _from, state) do
+    {:ok, _election_pid} = Election.Supervisor.start_child(key)
+    {:reply, :ok, state}
+  end
+
+  @impl true
   def handle_call(msg, _from, state) do
     Logger.info("[mailroom:call] - unknown call message received: #{inspect(msg)}")
     {:reply, nil, state}
@@ -40,7 +46,9 @@ defmodule Mailroom do
         :ok = Election.process_command(cmd)
       else
         # If the local `Election` process is not running,
-        # - Start local `Election` process
+        # - 1. Start local `Election` process (writer)
+        # - 2. Start 1 remote `Election` process in other availability zone (reader)
+        # - 2. State 2 remote `Election` processes in other data centers (readers)
         # - Send command to local `Election` process
         {:ok, _election_pid} = Election.Supervisor.start_child(key)
         :ok = Election.process_command(cmd)

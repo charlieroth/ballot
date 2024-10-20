@@ -8,19 +8,13 @@ defmodule Ballot do
     |> Tuple.append({Ballot.Registry, key})
   end
 
-  @spec parse_node(node :: Node.t()) :: %{
-          name: String.t(),
-          host: String.t(),
-          dc: String.t(),
-          dc_az: String.t(),
-          dc_node: String.t()
-        }
+  @spec parse_node(node :: Node.t()) :: Ballot.ClusterNode.t()
   def parse_node(node) do
     node_string = Atom.to_string(node)
     [name, host] = String.split(node_string, "@")
     [dc, dc_az, dc_node] = String.split(name, "-")
 
-    %{
+    %Ballot.ClusterNode{
       name: name,
       host: host,
       dc: dc,

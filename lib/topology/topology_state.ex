@@ -1,10 +1,15 @@
 defmodule Topology.State do
   @type t :: %__MODULE__{
+          dc_az_hash_rings: %{String.t() => HashRing.t()},
           dc_hash_rings: %{String.t() => HashRing.t()},
           cluster_hash_ring: HashRing.t()
         }
 
-  defstruct [:dc_hash_rings, :cluster_hash_ring]
+  @enforce_keys [:dc_hash_rings, :cluster_hash_ring, :dc_az_hash_rings]
+
+  defstruct [:dc_hash_rings, :cluster_hash_ring, :dc_az_hash_rings]
+
+  require Logger
 
   @doc """
   Create a new topology state.
@@ -12,6 +17,7 @@ defmodule Topology.State do
   @spec new() :: t()
   def new() do
     %Topology.State{
+      dc_az_hash_rings: %{},
       dc_hash_rings: %{},
       cluster_hash_ring: HashRing.new()
     }
@@ -55,20 +61,41 @@ defmodule Topology.State do
     HashRing.key_to_node(dc_hash_ring, key)
   end
 
+  @spec get_reader_election_nodes(t(), Election.key()) :: [Node.t()]
+  def get_reader_election_nodes(
+        %Topology.State{dc_hash_rings: dc_hash_rings, cluster_hash_ring: cluster_hash_ring},
+        key
+      ) do
+    # Get reader node from same data center, other availability zone
+    # Get reader nodes, one from each data center
+  end
+
   @doc """
   Add a `Node` to the `Topology.State`.
   """
   @spec add_node(t(), Node.t()) :: t()
   def add_node(%Topology.State{} = state, node) do
-    %{dc: dc} = Ballot.parse_node(node)
-    dc_hash_ring = Map.get(state.dc_hash_rings, dc, HashRing.new())
+    cluster_node = Ballot.parse_node(node)
+    dc_az = Ballot.ClusterNode.get_dc_az(cluster_node)
+
+    # Update `dc_az_hash_rings`
+    dc_az_hash_ring = Map.get(state.dc_az_hash_rings, dc_az, HashRing.new())
+    dc_az_hash_ring = HashRing.add_node(dc_az_hash_ring, node)
+    new_dc_az_hash_rings = Map.put(state.dc_az_hash_rings, dc_az, dc_az_hash_ring)
+
+    # Update `dc_hash_rings`
+    dc_hash_ring = Map.get(state.dc_hash_rings, cluster_node.dc, HashRing.new())
     dc_hash_ring = HashRing.add_node(dc_hash_ring, node)
-    new_dc_hash_rings = Map.put(state.dc_hash_rings, dc, dc_hash_ring)
+    new_dc_hash_rings = Map.put(state.dc_hash_rings, cluster_node.dc, dc_hash_ring)
+
+    # Update `cluster_hash_ring`
+    new_cluster_hash_ring = HashRing.add_node(state.cluster_hash_ring, cluster_node.dc)
 
     %Topology.State{
       state
-      | dc_hash_rings: new_dc_hash_rings,
-        cluster_hash_ring: HashRing.add_node(state.cluster_hash_ring, dc)
+      | dc_az_hash_rings: new_dc_az_hash_rings,
+        dc_hash_rings: new_dc_hash_rings,
+        cluster_hash_ring: new_cluster_hash_ring
     }
   end
 
@@ -77,26 +104,39 @@ defmodule Topology.State do
   """
   @spec remove_node(t(), Node.t()) :: t()
   def remove_node(%Topology.State{} = state, node) do
-    %{dc: dc} = Ballot.parse_node(node)
-    dc_hash_ring = Map.get(state.dc_hash_rings, dc)
+    cluster_node = Ballot.parse_node(node)
+    dc_az = Ballot.ClusterNode.get_dc_az(cluster_node)
+
+    dc_az_hash_ring = Map.get(state.dc_az_hash_rings, dc_az)
+    dc_az_hash_ring = HashRing.remove_node(dc_az_hash_ring, node)
+
+    dc_hash_ring = Map.get(state.dc_hash_rings, cluster_node.dc)
     dc_hash_ring = HashRing.remove_node(dc_hash_ring, node)
+
+    dc_az_hash_ring_nodes = HashRing.nodes(dc_az_hash_ring)
     dc_hash_ring_nodes = HashRing.nodes(dc_hash_ring)
 
-    if length(dc_hash_ring_nodes) == 0 do
-      dc_hash_rings = Map.delete(state.dc_hash_rings, dc)
-      cluster_hash_ring = HashRing.remove_node(state.cluster_hash_ring, dc)
+    if length(dc_az_hash_ring_nodes) == 0 and length(dc_hash_ring_nodes) == 0 do
+      dc_az = Ballot.ClusterNode.get_dc_az(cluster_node)
+      new_dc_az_hash_rings = Map.delete(state.dc_az_hash_rings, dc_az)
+      new_dc_hash_rings = Map.delete(state.dc_hash_rings, cluster_node.dc)
+      new_cluster_hash_ring = HashRing.remove_node(state.cluster_hash_ring, cluster_node.dc)
 
       %Topology.State{
         state
-        | dc_hash_rings: dc_hash_rings,
-          cluster_hash_ring: cluster_hash_ring
+        | dc_az_hash_rings: new_dc_az_hash_rings,
+          dc_hash_rings: new_dc_hash_rings,
+          cluster_hash_ring: new_cluster_hash_ring
       }
     else
-      dc_hash_rings = Map.put(state.dc_hash_rings, dc, dc_hash_ring)
+      dc_az = Ballot.ClusterNode.get_dc_az(cluster_node)
+      new_dc_az_hash_rings = Map.put(state.dc_az_hash_rings, dc_az, dc_az_hash_ring)
+      new_dc_hash_rings = Map.put(state.dc_hash_rings, cluster_node.dc, dc_hash_ring)
 
       %Topology.State{
         state
-        | dc_hash_rings: dc_hash_rings
+        | dc_az_hash_rings: new_dc_az_hash_rings,
+          dc_hash_rings: new_dc_hash_rings
       }
     end
   end

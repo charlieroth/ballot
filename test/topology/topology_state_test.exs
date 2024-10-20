@@ -3,18 +3,39 @@ defmodule TestTopologyState do
 
   setup do
     topology = %Topology.State{
-      cluster_hash_ring: HashRing.add_nodes(HashRing.new(), ["MI", "IN", "IL", "OH"]),
+      dc_az_hash_rings: %{
+        "MI-A" => HashRing.add_node(HashRing.new(), :"MI-A-1@localhost"),
+        "MI-B" => HashRing.add_node(HashRing.new(), :"MI-B-1@localhost"),
+        "IN-A" => HashRing.add_node(HashRing.new(), :"IN-A-1@localhost"),
+        "IN-B" => HashRing.add_node(HashRing.new(), :"IN-B-1@localhost"),
+        "IL-A" => HashRing.add_node(HashRing.new(), :"IL-A-1@localhost"),
+        "IL-B" => HashRing.add_node(HashRing.new(), :"IL-B-1@localhost"),
+        "OH-A" => HashRing.add_node(HashRing.new(), :"OH-A-1@localhost"),
+        "OH-B" => HashRing.add_node(HashRing.new(), :"OH-B-1@localhost")
+      },
       dc_hash_rings: %{
         "MI" =>
           HashRing.add_nodes(HashRing.new(), [
             :"MI-A-1@localhost",
-            :"MI-B-1@localhost",
-            :"MI-B-4@localhost"
+            :"MI-B-1@localhost"
           ]),
-        "IN" => HashRing.add_node(HashRing.new(), :"IN-B-2@localhost"),
-        "IL" => HashRing.add_node(HashRing.new(), :"IL-B-3@localhost"),
-        "OH" => HashRing.add_node(HashRing.new(), :"OH-A-4@localhost")
-      }
+        "IN" =>
+          HashRing.add_nodes(HashRing.new(), [
+            :"IN-A-1@localhost",
+            :"IN-B-1@localhost"
+          ]),
+        "IL" =>
+          HashRing.add_nodes(HashRing.new(), [
+            :"IL-A-1@localhost",
+            :"IL-B-1@localhost"
+          ]),
+        "OH" =>
+          HashRing.add_nodes(HashRing.new(), [
+            :"OH-A-1@localhost",
+            :"OH-B-1@localhost"
+          ])
+      },
+      cluster_hash_ring: HashRing.add_nodes(HashRing.new(), ["MI", "IN", "IL", "OH"])
     }
 
     {:ok, topology: topology}
@@ -25,6 +46,9 @@ defmodule TestTopologyState do
       topology = Topology.State.new() |> Topology.State.add_node(:"MI-A-1@localhost")
 
       assert topology == %Topology.State{
+               dc_az_hash_rings: %{
+                 "MI-A" => HashRing.add_node(HashRing.new(), :"MI-A-1@localhost")
+               },
                dc_hash_rings: %{
                  "MI" => HashRing.add_nodes(HashRing.new(), [:"MI-A-1@localhost"])
                },
@@ -36,6 +60,9 @@ defmodule TestTopologyState do
       topology = Topology.State.add_node(Topology.State.new(), :"MI-A-1@localhost")
 
       expected_toplogy = %Topology.State{
+        dc_az_hash_rings: %{
+          "MI-A" => HashRing.add_node(HashRing.new(), :"MI-A-1@localhost")
+        },
         dc_hash_rings: %{
           "MI" => HashRing.add_nodes(HashRing.new(), [:"MI-A-1@localhost"])
         },
@@ -52,6 +79,10 @@ defmodule TestTopologyState do
       topology = Topology.State.add_node(topology, :"IN-A-1@localhost")
 
       expected_toplogy = %Topology.State{
+        dc_az_hash_rings: %{
+          "MI-A" => HashRing.add_node(HashRing.new(), :"MI-A-1@localhost"),
+          "IN-A" => HashRing.add_node(HashRing.new(), :"IN-A-1@localhost")
+        },
         dc_hash_rings: %{
           "MI" => HashRing.add_nodes(HashRing.new(), [:"MI-A-1@localhost"]),
           "IN" => HashRing.add_nodes(HashRing.new(), [:"IN-A-1@localhost"])
@@ -69,6 +100,11 @@ defmodule TestTopologyState do
       topology = Topology.State.add_node(topology, :"IL-A-1@localhost")
 
       expected_toplogy = %Topology.State{
+        dc_az_hash_rings: %{
+          "MI-A" => HashRing.add_node(HashRing.new(), :"MI-A-1@localhost"),
+          "IN-A" => HashRing.add_node(HashRing.new(), :"IN-A-1@localhost"),
+          "IL-A" => HashRing.add_node(HashRing.new(), :"IL-A-1@localhost")
+        },
         dc_hash_rings: %{
           "MI" => HashRing.add_nodes(HashRing.new(), [:"MI-A-1@localhost"]),
           "IN" => HashRing.add_nodes(HashRing.new(), [:"IN-A-1@localhost"]),
@@ -90,20 +126,36 @@ defmodule TestTopologyState do
     test "when removing last node in a dc, removes the dc from the topology", %{
       topology: topology
     } do
-      topology = Topology.State.remove_node(topology, :"IN-B-2@localhost")
+      topology = Topology.State.remove_node(topology, :"IN-A-1@localhost")
+      topology = Topology.State.remove_node(topology, :"IN-B-1@localhost")
 
       expected_toplogy = %Topology.State{
-        cluster_hash_ring: HashRing.add_nodes(HashRing.new(), ["MI", "IL", "OH"]),
+        dc_az_hash_rings: %{
+          "MI-A" => HashRing.add_node(HashRing.new(), :"MI-A-1@localhost"),
+          "MI-B" => HashRing.add_node(HashRing.new(), :"MI-B-1@localhost"),
+          "IL-A" => HashRing.add_node(HashRing.new(), :"IL-A-1@localhost"),
+          "IL-B" => HashRing.add_node(HashRing.new(), :"IL-B-1@localhost"),
+          "OH-A" => HashRing.add_node(HashRing.new(), :"OH-A-1@localhost"),
+          "OH-B" => HashRing.add_node(HashRing.new(), :"OH-B-1@localhost")
+        },
         dc_hash_rings: %{
           "MI" =>
             HashRing.add_nodes(HashRing.new(), [
               :"MI-A-1@localhost",
-              :"MI-B-1@localhost",
-              :"MI-B-4@localhost"
+              :"MI-B-1@localhost"
             ]),
-          "IL" => HashRing.add_node(HashRing.new(), :"IL-B-3@localhost"),
-          "OH" => HashRing.add_node(HashRing.new(), :"OH-A-4@localhost")
-        }
+          "IL" =>
+            HashRing.add_nodes(HashRing.new(), [
+              :"IL-A-1@localhost",
+              :"IL-B-1@localhost"
+            ]),
+          "OH" =>
+            HashRing.add_nodes(HashRing.new(), [
+              :"OH-A-1@localhost",
+              :"OH-B-1@localhost"
+            ])
+        },
+        cluster_hash_ring: HashRing.add_nodes(HashRing.new(), ["MI", "IL", "OH"])
       }
 
       assert HashRing.nodes(topology.cluster_hash_ring) ==
@@ -118,13 +170,37 @@ defmodule TestTopologyState do
       topology = Topology.State.remove_node(topology, :"MI-A-1@localhost")
 
       expected_toplogy = %Topology.State{
-        cluster_hash_ring: HashRing.add_nodes(HashRing.new(), ["MI", "IN", "IL", "OH"]),
+        dc_az_hash_rings: %{
+          "MI-B" => HashRing.add_node(HashRing.new(), :"MI-B-1@localhost"),
+          "IN-A" => HashRing.add_node(HashRing.new(), :"IN-A-1@localhost"),
+          "IN-B" => HashRing.add_node(HashRing.new(), :"IN-B-1@localhost"),
+          "IL-A" => HashRing.add_node(HashRing.new(), :"IL-A-1@localhost"),
+          "IL-B" => HashRing.add_node(HashRing.new(), :"IL-B-1@localhost"),
+          "OH-A" => HashRing.add_node(HashRing.new(), :"OH-A-1@localhost"),
+          "OH-B" => HashRing.add_node(HashRing.new(), :"OH-B-1@localhost")
+        },
         dc_hash_rings: %{
-          "MI" => HashRing.add_nodes(HashRing.new(), [:"MI-B-1@localhost", :"MI-B-4@localhost"]),
-          "IN" => HashRing.add_node(HashRing.new(), :"IN-B-2@localhost"),
-          "IL" => HashRing.add_node(HashRing.new(), :"IL-B-3@localhost"),
-          "OH" => HashRing.add_node(HashRing.new(), :"OH-A-4@localhost")
-        }
+          "MI" =>
+            HashRing.add_nodes(HashRing.new(), [
+              :"MI-B-1@localhost"
+            ]),
+          "IN" =>
+            HashRing.add_nodes(HashRing.new(), [
+              :"IN-A-1@localhost",
+              :"IN-B-1@localhost"
+            ]),
+          "IL" =>
+            HashRing.add_nodes(HashRing.new(), [
+              :"IL-A-1@localhost",
+              :"IL-B-1@localhost"
+            ]),
+          "OH" =>
+            HashRing.add_nodes(HashRing.new(), [
+              :"OH-A-1@localhost",
+              :"OH-B-1@localhost"
+            ])
+        },
+        cluster_hash_ring: HashRing.add_nodes(HashRing.new(), ["MI", "IN", "IL", "OH"])
       }
 
       assert HashRing.nodes(topology.cluster_hash_ring) ==
@@ -154,12 +230,23 @@ defmodule TestTopologyState do
                "MI" =>
                  HashRing.add_nodes(HashRing.new(), [
                    :"MI-A-1@localhost",
-                   :"MI-B-1@localhost",
-                   :"MI-B-4@localhost"
+                   :"MI-B-1@localhost"
                  ]),
-               "IN" => HashRing.add_node(HashRing.new(), :"IN-B-2@localhost"),
-               "IL" => HashRing.add_node(HashRing.new(), :"IL-B-3@localhost"),
-               "OH" => HashRing.add_node(HashRing.new(), :"OH-A-4@localhost")
+               "IN" =>
+                 HashRing.add_nodes(HashRing.new(), [
+                   :"IN-A-1@localhost",
+                   :"IN-B-1@localhost"
+                 ]),
+               "IL" =>
+                 HashRing.add_nodes(HashRing.new(), [
+                   :"IL-A-1@localhost",
+                   :"IL-B-1@localhost"
+                 ]),
+               "OH" =>
+                 HashRing.add_nodes(HashRing.new(), [
+                   :"OH-A-1@localhost",
+                   :"OH-B-1@localhost"
+                 ])
              }
     end
   end
@@ -171,8 +258,7 @@ defmodule TestTopologyState do
       assert dc_hash_ring ==
                HashRing.add_nodes(HashRing.new(), [
                  :"MI-A-1@localhost",
-                 :"MI-B-1@localhost",
-                 :"MI-B-4@localhost"
+                 :"MI-B-1@localhost"
                ])
     end
   end

@@ -39,6 +39,13 @@ defmodule Topology do
     GenServer.call(__MODULE__, {:get_election_node, key})
   end
 
+  @doc """
+  """
+  @spec get_reader_election_nodes(key :: Election.key()) :: [Node.t()]
+  def get_reader_election_nodes(key) do
+    GenServer.call(__MODULE__, {:get_reader_election_nodes, key})
+  end
+
   @impl true
   def init(:ok) do
     :net_kernel.monitor_nodes(true)
@@ -70,6 +77,11 @@ defmodule Topology do
   @impl true
   def handle_call({:get_election_node, key}, _from, state) do
     {:reply, Topology.State.get_election_node(state, key), state}
+  end
+
+  @impl true
+  def handle_call({:get_reader_election_nodes, key}, _from, state) do
+    {:reply, Topology.State.get_reader_election_nodes(state, key), state}
   end
 
   @impl true
